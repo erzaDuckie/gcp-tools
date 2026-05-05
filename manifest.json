@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "GCP TOOLS by ERZA",
-  "version": "3.0.2",
+  "version": "3.0.1",
   "description": "All-in-one GCP Tools: Bulk CPT, Bulk Insert High, Edit Inventory, Bulk Change Race",
   "permissions": [
     "activeTab",
