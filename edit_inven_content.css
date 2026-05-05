@@ -1,0 +1,477 @@
+/* ===== EZ FIX CORE STYLES - DISCORD THEME (UNIFORM BLUE BUTTONS) ===== */
+:root {
+    --discord-bg-primary: #36393f;
+    --discord-bg-secondary: #2f3136;
+    --discord-bg-tertiary: #202225;
+    --discord-bg-input: #40444b;
+    --discord-text-normal: #dcddde;
+    --discord-text-muted: #8e9297;
+    --discord-blurple: #5865F2;
+    --discord-blurple-hover: #4752C4;
+    --discord-green: #3ba55c;
+    --discord-green-hover: #2d7d46;
+    --discord-red: #ed4245;
+    --discord-red-hover: #c03537;
+    --discord-yellow: #faa81a;
+    --discord-orange: #f39c12;
+    --discord-blue: #4a90e2;      /* Untuk aksen tertentu */
+    --discord-blue-hover: #357abd;
+    --discord-border: #40444b;
+}
+
+#rfFixer {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 400px;
+    background: var(--discord-bg-primary);
+    border: 2px solid var(--discord-blurple);
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+    font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+    color: var(--discord-text-normal);
+    z-index: 10000;
+    max-height: 100vh;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    transform-origin: top right;
+}
+
+#rfFixer.minimized {
+    width: 250px;
+    height: 55px;
+    top: 20px;
+    right: 20px;
+    left: auto;
+}
+
+#rfFixer.minimized #rfFixerBody {
+    display: none;
+}
+
+#rfFixerHeader {
+    padding: 8px 15px;
+    background: var(--discord-bg-tertiary);
+    border-bottom: 1px solid var(--discord-border);
+    cursor: move;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+}
+
+.header-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.control-btn {
+    background: none;
+    border: none;
+    color: var(--discord-text-muted);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s;
+    width: auto;
+    margin: 0;
+}
+
+.control-btn:hover {
+    background: var(--discord-bg-input);
+    color: var(--discord-text-normal);
+}
+
+#rfFixerBody { 
+    padding: 15px;
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
+}
+
+/* ===== ACTION BUTTONS (Scan, Fix All, Undo, Redo) ===== */
+.action-buttons {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.action-buttons button {
+    flex: 1;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 4px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: white;
+    min-width: 0;
+    white-space: nowrap;
+}
+
+/* Tombol aksi */
+#scanBtn, #fixBtn, #redoBtn {
+    background: var(--discord-blurple);
+}
+#scanBtn:hover, #fixBtn:hover, #redoBtn:hover {
+    background: var(--discord-blurple-hover);
+}
+
+/* Undo button merah */
+#undoBtn {
+    background: var(--discord-red);
+}
+#undoBtn:hover {
+    background: var(--discord-red-hover);
+}
+
+.action-buttons button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+#historyCount {
+    font-size: 10px;
+    color: var(--discord-text-muted);
+    white-space: nowrap;
+}
+
+/* ===== REFRESH DATABASE BUTTON ===== */
+.refresh-db-btn {
+    background: var(--discord-blurple);
+    border: none;
+    color: white;
+    border-radius: 6px;
+    padding: 8px;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 8px;
+    font-weight: 500;
+    transition: all 0.2s;
+    font-size: 13px;
+}
+.refresh-db-btn:hover {
+    background: var(--discord-blurple-hover);
+}
+.refresh-db-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* ===== FILTER BUTTONS (All, Mismatch, Correct) ===== */
+.scan-filter-bar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.scan-filter-btn {
+    flex: 1;
+    padding: 6px 4px;
+    background: var(--discord-bg-secondary);
+    border: 1px solid var(--discord-border);
+    color: var(--discord-text-muted);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.2s;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.scan-filter-btn.active {
+    background: var(--discord-blurple);
+    color: white;
+    border-color: var(--discord-blurple-hover);
+}
+
+.scan-filter-btn:hover {
+    background: var(--discord-bg-input);
+    color: var(--discord-text-normal);
+}
+
+/* ===== RACE DISPLAY ===== */
+.race-display {
+    background: var(--discord-bg-tertiary);
+    border-radius: 8px;
+    padding: 3px;
+    margin: 2px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.race-accretia { 
+    color: #aeaeae; 
+    border: 1px solid #aeaeae; 
+}
+.race-bellato { 
+    color: #e06161; 
+    border: 1px solid #e06161; 
+}
+.race-cora { 
+    color: #c100d1; 
+    border: 1px solid #c100d1; 
+}
+
+/* ===== TYPE BUTTONS - UNIFORM BLUE SOLID ===== */
+.armor-type-buttons,
+.accessory-type-buttons,
+.cloak-type-buttons,
+.shield-type-buttons {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.armor-btn,
+.accessory-btn,
+.cloak-btn,
+.shield-btn {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 42px;
+    background: var(--discord-blurple); /* Semua tombol tipe menggunakan biru solid */
+}
+
+.armor-btn:hover,
+.accessory-btn:hover,
+.cloak-btn:hover,
+.shield-btn:hover {
+    background: var(--discord-blurple-hover) !important;
+}
+
+/* Hapus pewarnaan khusus per jenis agar seragam biru semua */
+.armor-btn.warrior,
+.armor-btn.ranger,
+.armor-btn.force,
+.accessory-btn.defense,
+.accessory-btn.avoid,
+.cloak-btn[data-type="cloak-defense"],
+.cloak-btn[data-type="cloak-avoid"],
+.shield-btn[data-type="defense"],
+.shield-btn[data-type="subshield"] {
+    background: var(--discord-blurple); /* Tetap biru */
+}
+
+/* Hover harus override class-specific colors */
+.armor-btn.warrior:hover,
+.armor-btn.ranger:hover,
+.armor-btn.force:hover,
+.accessory-btn.defense:hover,
+.accessory-btn.avoid:hover {
+    background: var(--discord-blurple-hover) !important;
+}
+
+.accessory-title {
+    font-size: 12px;
+    color: var(--discord-text-muted);
+    margin: 5px 0 8px 0;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* ===== LIST CONTAINERS ===== */
+.list-container {
+    max-height: 200px;
+    overflow-y: auto;
+    background: var(--discord-bg-tertiary);
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid var(--discord-border);
+    font-size: 14px;
+}
+
+.clickable-item {
+    cursor: pointer;
+    padding: 8px 10px;
+    border-radius: 4px;
+    margin: 4px 0;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 15px;
+    line-height: 1.3;
+}
+
+.clickable-item:hover {
+    background: var(--discord-blurple);
+    color: white;
+    border-color: var(--discord-blurple-hover);
+}
+
+.fixed-item {
+    color: var(--discord-green);
+    border-left: 3px solid var(--discord-green);
+    padding-left: 8px;
+}
+
+.original-item {
+    color: var(--discord-red);
+    border-left: 3px solid var(--discord-red);
+    padding-left: 8px;
+}
+
+.item-highlight {
+    animation: highlight 2s ease-in-out;
+    border: 2px solid var(--discord-blurple) !important;
+    background: rgba(88, 101, 242, 0.2) !important;
+}
+
+@keyframes highlight {
+    0% { background: var(--discord-blurple); color: white; }
+    100% { background: rgba(88, 101, 242, 0.2); }
+}
+
+.section-title {
+    font-size: 14px;  
+    color: var(--discord-text-muted);
+    margin: 15px 0 8px 0;  
+    font-weight: bold;
+}
+
+.empty-message {
+    color: var(--discord-text-muted);
+    text-align: center;
+    padding: 20px;
+    font-style: italic;
+    font-size: 14px;  
+}
+
+.item-stats {
+    background: var(--discord-bg-tertiary);
+    border-radius: 6px;
+    padding: 8px;
+    margin: 5px 0;
+    font-size: 11px;
+    text-align: center;
+    color: var(--discord-text-muted);
+    border: 1px solid var(--discord-border);
+}
+
+/* ===== SEARCH INPUT ===== */
+#rfFixerSearch {
+    width: calc(100% - 12px);
+    padding: 6px 8px;
+    margin-bottom: 8px;
+    border-radius: 6px;
+    border: 1px solid var(--discord-border);
+    background: var(--discord-bg-tertiary);
+    color: var(--discord-text-normal);
+}
+#rfFixerSearch:focus {
+    outline: none;
+    border-color: var(--discord-blurple);
+}
+
+/* ===== SCANNED CONTROLS ===== */
+.scanned-controls {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+.scanned-count {
+    color: var(--discord-text-muted);
+    font-size: 12px;
+}
+
+/* ===== DATABASE STATUS ===== */
+.database-status {
+    font-size: 11px;
+    color: var(--discord-text-muted);
+    text-align: center;
+    margin-top: 5px;
+}
+.database-status.loading { color: var(--discord-yellow); }
+.database-status.success { color: var(--discord-green); }
+.database-status.error { color: var(--discord-red); }
+
+/* ===== WEAPON STYLES ===== */
+.weapon-standard { border-left: 3px solid var(--discord-green); }
+.weapon-custom { border-left: 3px solid #9b59b6; }
+.weapon-unknown { border-left: 3px solid var(--discord-yellow); }
+
+/* ===== RACE BADGES ===== */
+.race-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: bold;
+    margin: 0 4px;
+    color: white;
+}
+.race-a { background: #aeaeae; }
+.race-b { background: #e06161; }
+.race-c { background: #c100d1; }
+.race-all { background: var(--discord-green); }
+.race-unknown { background: #95a5a6; }
+
+.type-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: bold;
+    margin: 0 4px;
+    background: var(--discord-blurple);
+    color: white;
+}
+
+.erza-discord {
+    color: var(--discord-blurple) !important;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.erza-discord:hover {
+    color: var(--discord-blurple-hover) !important;
+    text-decoration: underline;
+}
+
+/* ===== TOAST NOTIFICATION ===== */
+#rfToast {
+    visibility: hidden;
+    min-width: 200px;
+    background-color: var(--discord-bg-tertiary);
+    color: var(--discord-text-normal);
+    text-align: center;
+    border-radius: 8px;
+    padding: 10px 16px;
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    border-left: 4px solid var(--discord-blurple);
+    z-index: 10001;
+    opacity: 0;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+#rfToast.show {
+    visibility: visible;
+    opacity: 1;
+}
+#rfToast.toast-success { border-left-color: var(--discord-green); }
+#rfToast.toast-error { border-left-color: var(--discord-red); }
+#rfToast.toast-warn { border-left-color: var(--discord-yellow); }
+#rfToast.toast-info { border-left-color: var(--discord-blurple); }
