@@ -34,17 +34,4 @@ Saat ada update, popup extension akan otomatis menampilkan banner **"🔔 Update
 
 ---
 
-## Cara Release Update Baru (untuk ERZA)
-
-1. Edit file yang perlu diubah (popup.js, dll)
-2. Update `"version"` di **manifest.json** → misal `"3.0a"` → `"3.1"`
-3. Update juga konstanta `LOCAL_VERSION` di **popup.js** supaya sama
-4. Zip semua file → rename jadi **`GCP_TOOLS_latest.zip`**
-5. Push semua file + zip ke GitHub
-6. Buat **Release** baru di GitHub dengan tag versi yang sama, upload `GCP_TOOLS_latest.zip` sebagai asset
-
-> Extension semua user akan otomatis mendeteksi versi baru saat popup dibuka berikutnya.
-
----
-
 Made by **ERZA** · [Discord](https://discord.com/users/334621293125304331)
