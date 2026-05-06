@@ -674,23 +674,31 @@
 
         // Tunggu scroll smooth selesai (~400ms) agar getBoundingClientRect akurat
         setTimeout(() => {
-        // ── Hitung posisi popup di sebelah kanan input field ──
-        const inputRect = item.input.getBoundingClientRect();
+        // ── Hitung posisi popup di sebelah kanan elemen visible (bukan hidden input) ──
+        const visibleEl = getVisibleElement(item.input);
+        const inputRect = visibleEl.getBoundingClientRect();
+        // Fallback jika rect masih nol (hidden element): gunakan posisi tengah layar
+        const rectValid = inputRect.width > 0 || inputRect.height > 0;
         const popupWidth = 260;
-        const spaceRight = window.innerWidth - inputRect.right - 8;
-        const spaceLeft  = inputRect.left - 8;
         let popupLeft, popupTop;
 
-        if (spaceRight >= popupWidth) {
-            popupLeft = inputRect.right + 8;
-        } else if (spaceLeft >= popupWidth) {
-            popupLeft = inputRect.left - popupWidth - 8;
+        if (!rectValid) {
+            // Posisi fallback: tengah horizontal, sedikit dari atas
+            popupLeft = Math.max(8, (window.innerWidth - popupWidth) / 2);
+            popupTop = 120;
         } else {
-            // Tidak cukup ruang kanan/kiri — muncul di bawah input
-            popupLeft = Math.max(8, Math.min(inputRect.left, window.innerWidth - popupWidth - 8));
+            const spaceRight = window.innerWidth - inputRect.right - 8;
+            const spaceLeft  = inputRect.left - 8;
+            if (spaceRight >= popupWidth) {
+                popupLeft = inputRect.right + 8;
+            } else if (spaceLeft >= popupWidth) {
+                popupLeft = inputRect.left - popupWidth - 8;
+            } else {
+                popupLeft = Math.max(8, Math.min(inputRect.left, window.innerWidth - popupWidth - 8));
+            }
+            popupTop = Math.min(inputRect.top, window.innerHeight - 360);
+            popupTop = Math.max(8, popupTop);
         }
-        popupTop = Math.min(inputRect.top, window.innerHeight - 360);
-        popupTop = Math.max(8, popupTop);
 
         // ── Buat popup element ──
         const popup = document.createElement('div');
@@ -1740,6 +1748,49 @@ results.push({
                 }
             } catch (e) {}
         });
+
+        // ==================== NEW VERSION (Select2) SUPPORT ====================
+        // Di New Version, item code disimpan di <input type="hidden" class="select2-offscreen" name="item_codeX">
+        // Yang ditampilkan di UI adalah <span class="select2-chosen"> di dalam container #s2id_item_codeX
+        // Kita baca dari hidden input langsung (nilainya sudah benar), lalu gunakan span sebagai display label.
+        const select2HiddenInputs = document.querySelectorAll('input[type="hidden"][name^="item_code"].select2-offscreen, input[type="hidden"][name^="item_code"].item_code_ajax');
+        select2HiddenInputs.forEach((input) => {
+            try {
+                const name = (input.name || '').trim();
+                const code = (input.value || '').trim().toLowerCase();
+
+                if (!code || code === 'none' || code.trim() === '') return;
+
+                // Hindari duplikasi — skip jika sudah ada di results
+                if (results.some(r => r.input === input)) return;
+
+                // Coba baca label dari span Select2 untuk display info (opsional)
+                const idx = name.replace('item_code', '');
+                const select2ContainerId = `s2id_item_code${idx}`;
+                const labelSpan = document.querySelector(`#${select2ContainerId} a span.select2-chosen`);
+                const displayLabel = labelSpan ? labelSpan.textContent.trim() : code;
+
+                // Ambil qty dari input qty/amount yang bersesuaian
+                const qtyInput = document.querySelector(`input[name="item_qty${idx}"]`) ||
+                                 document.querySelector(`input[name="item_amount${idx}"]`);
+                const qty = qtyInput ? (qtyInput.value || '1') : '1';
+
+                const analysis = analyzeItem(code);
+
+                results.push({
+                    input,
+                    code,
+                    qty,
+                    idx,
+                    displayLabel, // label lengkap dari Select2 span (ex: "iynew90 - Warden Weapon Coupon")
+                    isNewVersion: true,
+                    analysis: analysis,
+                    isValid: analysis ? analysis.isConvertible : false,
+                    currentRace: analysis ? analysis.race : null,
+                    needsFix: analysis ? analysis.needsFix : false
+                });
+            } catch (e) {}
+        });
         
         return results;
     }
@@ -1905,16 +1956,38 @@ results.push({
                           .replace(/>/g, '&gt;');
     }
 
+    // Untuk New Version (Select2), input adalah hidden — kita cari elemen visible-nya
+    function getVisibleElement(inputElement) {
+        if (!inputElement) return inputElement;
+        const isHidden = inputElement.type === 'hidden' ||
+                         (inputElement.classList && (
+                             inputElement.classList.contains('select2-offscreen') ||
+                             inputElement.classList.contains('item_code_ajax')
+                         ));
+        if (!isHidden) return inputElement;
+        // Cari container Select2: name="item_codeX" -> id="s2id_item_codeX"
+        const name = (inputElement.name || '').trim();
+        if (name) {
+            const s2Container = document.getElementById(`s2id_${name}`);
+            if (s2Container) return s2Container;
+        }
+        return inputElement.closest('tr') || inputElement;
+    }
+
     function focusOnItem(inputElement) {
         if (!inputElement) return;
-        
         try {
-            inputElement.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
-            inputElement.classList.add('item-highlight');
-            inputElement.focus();
-            
-            setTimeout(() => inputElement.select && inputElement.select(), 100);
-            setTimeout(() => inputElement.classList.remove('item-highlight'), 2000);
+            const visibleEl = getVisibleElement(inputElement);
+            visibleEl.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+            visibleEl.classList.add('item-highlight');
+            if (inputElement.type !== 'hidden') {
+                inputElement.focus();
+                setTimeout(() => inputElement.select && inputElement.select(), 100);
+            }
+            setTimeout(() => {
+                visibleEl.classList.remove('item-highlight');
+                try { inputElement.classList.remove('item-highlight'); } catch(e) {}
+            }, 2000);
         } catch (e) {}
     }
 
