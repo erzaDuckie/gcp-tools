@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════
-//  GCP TOOLS by ERZA  —  popup.js  v3.0.2
+//  GCP TOOLS by ERZA  —  popup.js  v3.1.1
 // ═══════════════════════════════════════════════════
 
 // ── View navigation ───────────────────────────────
@@ -1084,7 +1084,7 @@ function raceReadResult() {
 
 const GH_MANIFEST_URL  = 'https://raw.githubusercontent.com/erzaDuckie/gcp-tools/main/manifest.json';
 const GH_DOWNLOAD_URL  = 'https://github.com/erzaDuckie/gcp-tools/releases/latest/download/GCP_TOOLS_latest.zip';
-const LOCAL_VERSION    = '3.0.2';
+const LOCAL_VERSION    = '3.1.1';
 
 // Semaphore version comparison: "3.0a" < "3.1" < "3.1b" < "4.0"
 function parseVer(v) {
