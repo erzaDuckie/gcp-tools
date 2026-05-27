@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "GCP TOOLS by ERZA",
-  "version": "3.1.1",
-  "description": "All-in-one GCP Tools: Bulk CPT, Bulk Insert High, Edit Inventory, Bulk Change Race",
+  "version": "4.0.0",
+  "description": "All-in-one GCP Tools: Bulk CPT, Bulk Package, Bulk Change Race, Give Item Helper",
   "permissions": [
     "activeTab",
     "tabs",
@@ -12,7 +12,8 @@
   ],
   "host_permissions": [
     "https://*.gamecp.net/*",
-    "https://raw.githubusercontent.com/*"
+    "https://docs.google.com/*",
+    "https://gcp-tools-license.levin-erza.workers.dev/*"
   ],
   "icons": {
     "16": "icons/icon16.png",
@@ -43,15 +44,32 @@
   "content_scripts": [
     {
       "matches": [
-        "https://*.gamecp.net/index.php?do=admin_manage_edit_inventory*"
+        "https://*.gamecp.net/*"
       ],
       "js": [
-        "edit_inven_content.js"
-      ],
-      "css": [
-        "edit_inven_content.css"
+        "content_autologin.js"
       ],
       "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://*.gamecp.net/*"
+      ],
+      "js": [
+        "content_bank.js",
+        "content_give.js"
+      ],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://*.gamecp.net/*"
+      ],
+      "js": [
+        "give_page_helper.js"
+      ],
+      "run_at": "document_idle",
+      "world": "MAIN"
     }
   ]
 }
