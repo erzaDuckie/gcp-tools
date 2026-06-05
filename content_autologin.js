@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════
-//  GCP TOOLS — content_autologin.js  v3.4.2
+//  GCP TOOLS — content_autologin.js  v3.5.0
 //  Auto Login + Auto PIN untuk *.gamecp.net
 //
 //  LOGIN selectors (confirmed):
@@ -22,16 +22,14 @@
 //    PIN:
 //      1. Deteksi halaman PIN (#viewPINInput + #input_pin)
 //      2. Pantau Turnstile PIN → setelah solved, klik digit PIN otomatis
-//      3. Klik SUBMIT otomatis → redirect ke homepage
+//      3. Klik SUBMIT otomatis → tetap di halaman admin (session PIN aktif)
 // ═══════════════════════════════════════════════════
 
 (function () {
   'use strict';
 
   // ── Domain dinamis — otomatis sesuai tab yang aktif ──
-  const currentHost    = window.location.hostname; // e.g. "warden.gamecp.net"
-  const ADMIN_PIN_TRIGGER = `https://${currentHost}/index.php?do=admin_adm_edit_character`;
-  const HOME_URL          = `https://${currentHost}/index.php`;
+  const currentHost = window.location.hostname; // e.g. "warden.gamecp.net"
 
   // ── Map: digit '0'-'9' → id button ───────────────
   // Confirmed: btnPin0="1", btnPin1="2",..., btnPin8="9", btnPin9="0"
@@ -55,24 +53,8 @@
   function isPinPage() {
     return !!document.querySelector('#viewPINInput') &&
            !!document.querySelector('#input_pin') &&
-           !!document.querySelector('#btnPin9'); 
+           !!document.querySelector('#btnPin9');
   }
-
-  function isHomePage() {
-    const url = window.location.href;
-    // index.php tanpa ?do=admin, bukan halaman login/PIN
-    return (url.includes(`${currentHost}/index.php`) || url.endsWith(`${currentHost}/`)) &&
-           !url.includes('?do=admin') &&
-           !url.includes('?d=logout') &&
-           !url.includes('?d=login') &&
-           !document.querySelector('#viewPINInput');
-  }
-
-	function isPostPinPage() {
-	  return window.location.href.includes('?do=admin_adm_edit_character') &&
-			 !document.querySelector('#viewPINInput') &&
-			 !document.querySelector('#input_pin');
-	}
 
   // ════════════════════════════════════════════════
   //  BANNER
@@ -179,8 +161,6 @@
         '<b>✅ Cloudflare selesai — Login otomatis...</b>',
         '#22543d', '#68d391'
       );
-      // Set flag agar halaman berikutnya redirect ke admin panel (trigger PIN)
-      sessionStorage.setItem('gcptools_post_login', '1');
       setTimeout(() => loginBtn.click(), 600);
     });
   }
@@ -219,56 +199,11 @@
 
       await new Promise(r => setTimeout(r, 400));
 
-      // Verifikasi PIN (masked)
-      const hiddenPin = document.querySelector('#input_pin');
-      const entered   = hiddenPin ? hiddenPin.value : '?';
-      console.log('[AutoLogin] PIN entered: HAHAHA TIDAK KENA');
-
       updateBanner('<b>✅ PIN terisi — Submit otomatis...</b>', '#22543d', '#68d391');
       await new Promise(r => setTimeout(r, 400));
       submitBtn.click();
+      // Selesai — tetap di halaman admin, session PIN aktif sampai logout / ganti IP
     });
-  }
-
-  // ════════════════════════════════════════════════
-  //  POST-LOGIN REDIRECT HANDLER
-  //  Setelah login berhasil → landing di index.php
-  //  Deteksi flag sessionStorage → redirect ke admin panel
-  //  → PIN akan muncul → handlePin() yang urus
-  // ════════════════════════════════════════════════
-
-  async function handlePostLogin() {
-    sessionStorage.removeItem('gcptools_post_login');
-    console.log('[AutoLogin] Post-login terdeteksi — redirect ke admin panel untuk trigger PIN...');
-
-    await new Promise(r => setTimeout(r, 800));
-
-    showBanner(
-      '<b>🔐 GCP Tools</b> &mdash; ' +
-      '<span style="color:#fbbf24;">Login berhasil — membuka admin panel untuk PIN...</span>'
-    );
-
-    await new Promise(r => setTimeout(r, 600));
-    window.location.href = ADMIN_PIN_TRIGGER;
-  }
-
-  // ════════════════════════════════════════════════
-  //  POST-PIN REDIRECT HANDLER
-  //  Setelah PIN submit → diarahkan ke admin_adm_edit_character
-  //  Redirect balik ke homepage
-  // ════════════════════════════════════════════════
-
-  async function handlePostPin() {
-    console.log('[AutoLogin] Post-PIN terdeteksi — redirect ke homepage...');
-
-    showBanner(
-      '<b>✅ GCP Tools</b> &mdash; ' +
-      '<span style="color:#68d391;">Login & PIN selesai — menuju homepage...</span>',
-      '#22543d'
-    );
-
-    await new Promise(r => setTimeout(r, 800));
-    window.location.href = HOME_URL;
   }
 
   // ════════════════════════════════════════════════
@@ -281,11 +216,7 @@
       async function(data) {
         if (!data.autologin_enabled) return;
 
-        if (isPostPinPage()) {
-          // Setelah PIN submit → redirect ke homepage
-          await handlePostPin();
-
-        } else if (isLoginPage()) {
+        if (isLoginPage()) {
           const username = (data.autologin_username || '').trim();
           const password = data.autologin_password || '';
           if (!username || !password) {
@@ -293,10 +224,6 @@
           }
           console.log('[AutoLogin] Halaman LOGIN terdeteksi');
           await handleLogin(username, password);
-
-        } else if (isHomePage() && sessionStorage.getItem('gcptools_post_login') === '1') {
-          // Baru saja login berhasil — redirect ke admin panel untuk trigger PIN
-          await handlePostLogin();
 
         } else if (isPinPage()) {
           const pin = (data.autologin_pin || '').trim();

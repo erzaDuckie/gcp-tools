@@ -34,6 +34,16 @@ All-in-one Chrome Extension untuk GCP Warden admin panel.
 
 ---
 
+## Cara Release Update Baru (untuk ERZA)
+
+1. Edit file yang perlu diubah
+2. Update `"version"` di **manifest.json**
+3. Tambahkan entry baru di tab **Log Update** di `popup.html`
+4. Tambahkan entry di section **Changelog** di `README.md`
+5. Zip semua file dan bagikan
+
+---
+
 ## Changelog
 
 ### v3.3.0

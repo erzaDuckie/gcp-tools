@@ -41,13 +41,8 @@ function getTalicInfo(tdEl) {
 }
 
 function decodeUpgrade(dataUpg) {
-  // dataUpg is a signed 32-bit int stored as string
-  // Upgrade level is encoded in bits 28-30 (3 bits)
-  // 0x0FFFFFFF / 0x7FFFFFFF = +0 (no upgrade)
-  // 0x70000000 = +7, 0x60000000 = +6, etc.
-  const val = parseInt(dataUpg) >>> 0; // treat as unsigned 32-bit
+  const val = parseInt(dataUpg) >>> 0;
   const upg = (val >>> 28) & 0x7;
-  // Values 0xF (15) and 0x7 with lower bits all 1 = no upgrade
   if (val === 0x0FFFFFFF || val === 0x7FFFFFFF || val === 0xFFFFFFFF) return 0;
   return upg;
 }
@@ -55,18 +50,14 @@ function decodeUpgrade(dataUpg) {
 function scanBankItems() {
   const items = [];
   const allRows = document.querySelectorAll("#porm tr");
-
-  // Track seen item serials to avoid duplicates (each item appears in 2 rows)
   const seen = new Set();
 
   allRows.forEach((row, idx) => {
-    // Skip header rows
     if (row.querySelector("th.success")) return;
 
     const tds = row.querySelectorAll("td");
     if (tds.length < 3) return;
 
-    // tds[0]=checkbox, tds[1]=# number, tds[2]=item info
     const itemTd = tds[2];
     if (!itemTd) return;
 
@@ -75,7 +66,6 @@ function scanBankItems() {
 
     const infoTd = innerTds[1];
 
-    // Item code from first <b> like "(ihcwb67)"
     let itemCode = "";
     let itemName = "";
     const boldEls = infoTd.querySelectorAll("b");
@@ -85,37 +75,28 @@ function scanBankItems() {
         itemCode = txt.slice(1, -1);
       }
     }
-    // Item name from anchor span
     const nameEl = infoTd.querySelector("a span b, a.tooltipx span b, a.rzr_id span b");
     if (nameEl) itemName = nameEl.textContent.trim();
 
     if (!itemCode) return;
 
-    // Dedup by item serial (last column td or anchor href)
     const serialLink = row.querySelector("a[href*='item_ser=']");
     const serial = serialLink ? serialLink.textContent.trim() : `${itemCode}_${idx}`;
     if (seen.has(serial)) return;
     seen.add(serial);
 
-    // Quantity / Durability / Ammo — semua masuk ke qty sebagai Amount di Give Item
     let qty = 1;
     for (const d of infoTd.querySelectorAll("div")) {
       const txt = d.textContent.trim();
-      // Quantity (potion, consumable)
       let m = txt.match(/^Quantity\s*:\s*([\d,]+)$/);
       if (m) { qty = parseInt(m[1].replace(/,/g, "")); break; }
-      // Durability (senjata / armor)
       m = txt.match(/^Durability\s*:\s*([\d,]+)$/);
       if (m) { qty = parseInt(m[1].replace(/,/g, "")); break; }
-      // Ammo
       m = txt.match(/^Ammo\s*:\s*([\d,]+)$/);
       if (m) { qty = parseInt(m[1].replace(/,/g, "")); break; }
     }
 
-    // Talic
     const talic = getTalicInfo(infoTd);
-
-    // Upgrade from data-upg attribute
     const anchor = infoTd.querySelector("a[data-upg]");
     const upgrade = anchor ? decodeUpgrade(anchor.getAttribute("data-upg")) : 0;
 
@@ -135,18 +116,31 @@ function scanBankItems() {
   return items;
 }
 
+// ── Helper: cek apakah extension context masih valid ──
+function isContextValid() {
+  try {
+    return !!(typeof chrome !== "undefined" && chrome.runtime && chrome.runtime.id);
+  } catch (e) {
+    return false;
+  }
+}
+
+function showStatus(statusDiv, text, color, duration = 3000) {
+  statusDiv.textContent = text;
+  statusDiv.style.color = color;
+  statusDiv.style.display = "block";
+  setTimeout(() => { statusDiv.style.display = "none"; }, duration);
+}
+
 function injectScanButton() {
   if (document.getElementById("erza-bank-scanner")) return;
 
-  // Cari button Search dari halaman
   const searchBtn = document.querySelector("button.btn.btn-success");
   if (!searchBtn) {
-    // Fallback: kalau Search button belum ada, coba lagi setelah 500ms
     setTimeout(injectScanButton, 500);
     return;
   }
 
-  // Buat status div (tetap di fixed position agar tidak ganggu layout)
   const statusDiv = document.createElement("div");
   statusDiv.id = "erza-scan-status";
   statusDiv.style.cssText =
@@ -155,50 +149,55 @@ function injectScanButton() {
     "border-radius:6px;font-size:12px;display:none;border:1px solid #444;";
   document.body.appendChild(statusDiv);
 
-  // Buat button Scan — clone style dari Search button (btn btn-success)
   const scanBtn = document.createElement("button");
   scanBtn.id = "erza-bank-scanner";
   scanBtn.type = "button";
-  scanBtn.className = searchBtn.className; // salin class btn btn-success
+  scanBtn.className = searchBtn.className;
   scanBtn.innerHTML = 'Copy Bank Items';
-
-  // Sisipkan tepat setelah Search button dengan sedikit jarak
   scanBtn.style.marginLeft = "8px";
   searchBtn.parentNode.insertBefore(scanBtn, searchBtn.nextSibling);
 
   scanBtn.addEventListener("click", () => {
+    // ── Cek context valid sebelum apapun ──
+    if (!isContextValid()) {
+      showStatus(statusDiv, "⚠️ Extension direload — refresh halaman dulu!", "#ffcc00");
+      return;
+    }
+
     const items = scanBankItems();
+
     if (items.length === 0) {
-      statusDiv.textContent = "❌ No items found!";
-      statusDiv.style.display = "block";
-      statusDiv.style.color = "#ff6b6b";
-    } else {
-      if (typeof chrome === "undefined" || !chrome.storage) {
-        statusDiv.textContent = "⚠️ chrome.storage not available";
-        statusDiv.style.display = "block";
-        statusDiv.style.color = "#ffcc00";
-        setTimeout(() => { statusDiv.style.display = "none"; }, 3000);
-        return;
-      }
+      showStatus(statusDiv, "❌ No items found!", "#ff6b6b");
+      return;
+    }
+
+    // ── Simpan ke storage dengan try-catch untuk tangkap context invalidated ──
+    try {
       chrome.storage.local.set({
         rf_bank_items: items,
         rf_bank_scanned_at: Date.now(),
         rf_loaded_items: items,
         rf_loaded_selected: items.map(i => i.id)
       }, () => {
-        if (chrome.runtime.lastError) {
-          statusDiv.textContent = "⚠️ " + chrome.runtime.lastError.message;
-          statusDiv.style.color = "#ffcc00";
-        } else {
-          statusDiv.textContent = `✅ ${items.length} item(s) scanned!`;
-          statusDiv.style.color = "#6bff9e";
+        // Callback bisa terjadi setelah context invalidated — cek lagi
+        if (!isContextValid() || chrome.runtime.lastError) {
+          const msg = chrome.runtime.lastError
+            ? chrome.runtime.lastError.message
+            : "Extension context invalid";
+          // Jangan akses statusDiv jika sudah detached, wrap dengan try
+          try {
+            showStatus(statusDiv, "⚠️ " + msg, "#ffcc00");
+          } catch (_) {}
+          return;
         }
-        statusDiv.style.display = "block";
-        setTimeout(() => { statusDiv.style.display = "none"; }, 3000);
+        showStatus(statusDiv, `✅ ${items.length} item(s) scanned!`, "#6bff9e");
       });
-      return;
+    } catch (e) {
+      // "Extension context invalidated" error ditangkap di sini
+      try {
+        showStatus(statusDiv, "⚠️ Extension direload — refresh halaman dulu!", "#ffcc00");
+      } catch (_) {}
     }
-    setTimeout(() => { statusDiv.style.display = "none"; }, 3000);
   });
 }
 

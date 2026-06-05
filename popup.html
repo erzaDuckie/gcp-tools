@@ -8,1082 +8,967 @@
 </head>
 <body>
 
-  <!-- ══════════ VIEW: LICENSE GATE ══════════ -->
-  <!-- Ditampilkan saat license belum valid. Semua view lain disembunyikan JS -->
-  <div id="view-license" class="view" style="display:none;">
-    <div class="header">
-      <div class="header-icon">G</div>
-      <div class="header-title">GCP <span>TOOLS</span></div>
-      <div class="header-badge" id="lic-version-badge">v4.0.0</div>
+<!-- ══════════════════════════════════════════════════════════════
+     VIEW: LICENSE GATE
+     ══════════════════════════════════════════════════════════════ -->
+<div id="view-license" class="view">
+  <div class="header">
+    <div class="header-icon">G</div>
+    <div class="header-title">GCP <span>TOOLS</span></div>
+    <div class="header-badge">v4.0.1</div>
+  </div>
+  <div class="body" style="padding:16px;">
+    <div id="lic-status-card" style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:14px;text-align:center;min-height:64px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;">
+      <div id="lic-status-icon" style="font-size:24px;">🔑</div>
+      <div id="lic-status-msg" style="font-size:12px;color:var(--text3);line-height:1.5;">Masukkan license key untuk menggunakan GCP Tools.</div>
+      <div id="lic-status-detail" style="font-size:10px;color:var(--text3);display:none;"></div>
     </div>
-
-    <div class="body" style="padding:16px;">
-
-      <!-- Status card -->
-      <div id="lic-status-card" style="
-        background: var(--bg2);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 14px;
-        margin-bottom: 14px;
-        text-align: center;
-        min-height: 64px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        gap: 6px;
-      ">
-        <div id="lic-status-icon" style="font-size:24px;">🔑</div>
-        <div id="lic-status-msg" style="font-size:12px;color:var(--text3);line-height:1.5;">
-          Masukkan license key untuk menggunakan GCP Tools.
-        </div>
-        <div id="lic-status-detail" style="font-size:10px;color:var(--text3);display:none;"></div>
+    <div id="lic-input-wrap" style="margin-bottom:10px;">
+      <div style="font-size:10px;color:var(--text3);margin-bottom:5px;font-weight:600;letter-spacing:.5px;">LICENSE KEY</div>
+      <input type="text" id="lic-key-input" placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="19" autocomplete="off" spellcheck="false"
+        style="width:100%;box-sizing:border-box;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:9px 12px;font-size:13px;font-family:'Courier New',monospace;font-weight:700;color:#e3e5e8;outline:none;letter-spacing:1px;text-align:center;text-transform:uppercase;" />
+    </div>
+    <button id="lic-activate-btn" style="width:100%;padding:10px;background:var(--acc);color:#000;border:none;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:8px;transition:background .15s;">🔓 Aktivasi</button>
+    <button id="lic-deactivate-btn" style="display:none;width:100%;padding:7px;background:transparent;color:var(--text3);border:1px solid var(--border);border-radius:6px;font-size:11px;cursor:pointer;margin-bottom:8px;">🖥️ Hapus Device Ini (pindah PC)</button>
+    <div style="text-align:center;margin-top:12px;">
+      <div style="font-size:10px;color:var(--text3);line-height:1.6;">
+        Hubungi <span style="color:var(--acc);font-weight:600;">ERZA</span> untuk mendapatkan license key.<br>
+        <span style="color:var(--text3);">Discord: </span><span style="color:var(--acc);">334621293125304331</span>
       </div>
-
-      <!-- Input license key -->
-      <div id="lic-input-wrap" style="margin-bottom:10px;">
-        <div style="font-size:10px;color:var(--text3);margin-bottom:5px;font-weight:600;letter-spacing:.5px;">LICENSE KEY</div>
-        <input
-          type="text"
-          id="lic-key-input"
-          placeholder="XXXX-XXXX-XXXX-XXXX"
-          maxlength="19"
-          autocomplete="off"
-          spellcheck="false"
-          style="
-            width:100%;
-            box-sizing:border-box;
-            background:var(--bg3);
-            border:1px solid var(--border);
-            border-radius:6px;
-            padding:9px 12px;
-            font-size:13px;
-            font-family:'Courier New',monospace;
-            font-weight:700;
-            color:#e3e5e8;
-            outline:none;
-            letter-spacing:1px;
-            text-align:center;
-            text-transform:uppercase;
-          "
-        />
-      </div>
-
-      <!-- Tombol aktivasi -->
-      <button id="lic-activate-btn" style="
-        width:100%;
-        padding:10px;
-        background:var(--amber);color:#000;
-        color:white;
-        border:none;
-        border-radius:6px;
-        font-size:13px;
-        font-weight:700;
-        cursor:pointer;
-        margin-bottom:8px;
-        transition: background .15s;
-      ">🔓 Aktivasi</button>
-
-      <!-- Tombol deactivate (tersembunyi, muncul jika sudah pernah aktif) -->
-      <button id="lic-deactivate-btn" style="
-        display:none;
-        width:100%;
-        padding:7px;
-        background:transparent;
-        color:var(--text3);
-        border:1px solid var(--border);
-        border-radius:6px;
-        font-size:11px;
-        cursor:pointer;
-        margin-bottom:8px;
-      ">🖥️ Hapus Device Ini (pindah PC)</button>
-
-      <!-- Info -->
-      <div style="text-align:center;margin-top:12px;">
-        <div style="font-size:10px;color:var(--text3);line-height:1.6;">
-          Hubungi <span style="color:var(--amber);font-weight:600;">ERZA</span> untuk mendapatkan license key.<br>
-          <span style="color:var(--text3);">Discord: </span><span style="color:var(--amber);">334621293125304331</span>
-        </div>
-      </div>
-
     </div>
   </div>
+</div>
 
-  <!-- ══════════ LAUNCHER ══════════ -->
-  <div id="view-launcher" class="view active">
-    <div class="header">
-      <div class="header-icon">G</div>
-      <div class="header-title">GCP <span>TOOLS</span></div>
-      <div class="header-badge" id="local-version-badge">v4.0.0</div>
-    </div>
+<!-- ══════════════════════════════════════════════════════════════
+     VIEW: MAIN APP (sidebar layout)
+     ══════════════════════════════════════════════════════════════ -->
+<div id="view-main" class="view active">
 
-    <div class="launcher-tabs">
-      <div class="launcher-tab active" data-tab="main">Main</div>
-      <div class="launcher-tab" data-tab="log">Log Update</div>
-      <div class="launcher-tab" data-tab="settings">⚙ Settings</div>
-    </div>
-
-    <!-- Tab: Main -->
-    <div class="launcher-panel active" id="launcher-panel-main">
-      <div class="body">
-
-        <!-- Banner update — disembunyikan JS, muncul kalau ada update -->
-        <div id="update-banner" style="
-          display:none;
-          background: linear-gradient(135deg, #1a1f3a, #1e2040);
-          border: 1px solid rgba(88,101,242,0.4);
-          border-radius:7px;
-          padding:10px 12px;
-          margin-bottom:10px;
-          cursor:pointer;
-        ">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <span style="font-size:16px;">🔔</span>
-            <div style="flex:1;">
-              <div style="font-size:11px;font-weight:700;color:#7289da;">Update Tersedia!</div>
-              <div id="update-banner-notes" style="font-size:10px;color:var(--text3);margin-top:1px;"></div>
-            </div>
-            <a id="update-banner-link" href="#" target="_blank" style="
-              font-size:10px;
-              font-weight:700;
-              color:var(--amber);
-              text-decoration:none;
-              background:rgba(88,101,242,0.15);
-              padding:3px 8px;
-              border-radius:4px;
-              white-space:nowrap;
-            ">Download →</a>
-          </div>
-        </div>
-
-        <!-- License info strip -->
-        <div id="license-info-strip" style="
-          display:none;
-          background:var(--bg2);
-          border:1px solid rgba(255,255,255,0.05);
-          border-radius:6px;
-          padding:6px 10px;
-          margin-bottom:10px;
-          display:flex;
-          align-items:center;
-          gap:6px;
-        ">
-          <span style="font-size:10px;">🔑</span>
-          <div style="flex:1;font-size:10px;color:var(--text3);" id="lic-strip-text">Memeriksa license...</div>
-          <button id="lic-strip-logout" style="
-            font-size:9px;
-            color:var(--text3);
-            background:transparent;
-            border:none;
-            cursor:pointer;
-            padding:2px 4px;
-          " title="Logout license">✕</button>
-        </div>
-
-        <div class="card">
-          <div class="card-title">Server</div>
-          <div class="domain-wrap">
-            <span class="domain-prefix">https://</span>
-            <input type="text" class="inp-domain-field" id="launcher-domain" value="" placeholder="domain" />
-            <span class="domain-suffix">.gamecp.net</span>
-          </div>
-        </div>
-        <div class="menu-grid">
-          <button class="menu-btn" id="goto-cpt">
-            <div class="menu-btn-icon icon-blue">⚡</div>
-            <div>
-              <div class="menu-btn-title">Bulk CPT</div>
-              <div class="menu-btn-desc">Edit level, CPT, dan playtime massal</div>
-            </div>
-            <div class="menu-btn-arrow">›</div>
-          </button>
-          <button class="menu-btn" id="goto-package">
-            <div class="menu-btn-icon icon-green">🎁</div>
-            <div>
-              <div class="menu-btn-title">Bulk Package</div>
-              <div class="menu-btn-desc">Insert paket High atau Medium ke banyak player</div>
-            </div>
-            <div class="menu-btn-arrow">›</div>
-          </button>
-          <button class="menu-btn" id="goto-race">
-            <div class="menu-btn-icon icon-orange">⚔️</div>
-            <div>
-              <div class="menu-btn-title">Bulk Change Race</div>
-              <div class="menu-btn-desc">Ganti race &amp; job banyak player sekaligus</div>
-            </div>
-            <div class="menu-btn-arrow">›</div>
-          </button>
-          <button class="menu-btn" id="goto-give">
-            <div class="menu-btn-icon icon-red">⚡</div>
-            <div>
-              <div class="menu-btn-title">Give Item</div>
-              <div class="menu-btn-desc">Auto-fill Give Item dari bank scan atau preset</div>
-            </div>
-            <div class="menu-btn-arrow">›</div>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Tab: Log Update -->
-    <div class="launcher-panel" id="launcher-panel-log">
-      <div class="body">
-        <div class="changelog">
-
-          <!-- v3.3.0 -->
-          <div class="cl-version">
-            <div class="cl-ver-header">
-              <span class="cl-ver-badge latest">v3.3.0</span>
-              <span style="font-size:11px;color:var(--text2);font-weight:500;">Settings, Auto Login & CF Guard</span>
-              <span class="cl-ver-date">2026</span>
-            </div>
-            <div class="cl-items">
-              <div class="cl-item"><div class="cl-dot green"></div><span>Tab baru <b>⚙ Settings</b> di launcher — konfigurasi terpusat</span></div>
-              <div class="cl-item"><div class="cl-dot green"></div><span><b>Auto Login</b> — isi username, password &amp; PIN otomatis saat buka halaman login GCP. Pantau Turnstile → klik otomatis setelah CF selesai</span></div>
-              <div class="cl-item"><div class="cl-dot green"></div><span><b>Database Manager</b> — daftarkan Google Sheet ID per domain server. EZ Fix otomatis pakai database yang sesuai tanpa hardcode</span></div>
-              <div class="cl-item"><div class="cl-dot green"></div><span><b>CF Interstitial Guard</b> — semua bulk (CPT, High, Medium, Race) kini deteksi halaman "Just a moment" Cloudflare. Bulk otomatis pause &amp; tunggu CF resolve sendiri, lalu lanjut tanpa error</span></div>
-              <div class="cl-item"><div class="cl-dot orange"></div><span>Fix tombol INSERT High &amp; Medium — sebelumnya langsung klik tanpa tunggu CF widget. Kini polling sampai tombol enabled (max 30s)</span></div>
-              <div class="cl-item"><div class="cl-dot orange"></div><span>EZ Fix status bar kini tampilkan jumlah item &amp; nama domain aktif: <b>✅ Database loaded — 342 items | domain.gamecp.net</b></span></div>
-			  <div class="cl-item"><div class="cl-dot orange"></div><span>Fix perbaikan beberapa bug di button Give item: <b>Fill item dan Button Preset sekarang sudah tidak ada lagi code double atau hilang</b></span></div>
-			  <div class="cl-item"><div class="cl-dot orange"></div><span>🔐 Add License Key: <b>For Testig Contact <a href="https://discord.com/users/334621293125304331" target="_blank">ERZA</a></span></div>
-            </div>
-          </div>
-
-          <!-- v3.2.9 -->
-          <div class="cl-version">
-            <div class="cl-ver-header">
-              <span class="cl-ver-badge">v3.2.9</span>
-              <span style="font-size:11px;color:var(--text2);font-weight:500;">Give Item Helper</span>
-              <span class="cl-ver-date">2026</span>
-            </div>
-            <div class="cl-items">
-              <div class="cl-item"><div class="cl-dot green"></div><span>Fitur baru: <b>Give Item Helper</b> — integrasi ke launcher GCP Tools</span></div>
-              <div class="cl-item"><div class="cl-dot green"></div><span>Scan item dari <b>Bank Remove</b> page via tombol <b>Copy Bank Items</b></span></div>
-              <div class="cl-item"><div class="cl-dot green"></div><span>Preset system — buat, simpan, load, <b>edit</b>, dan hapus preset item</span></div>
-              <div class="cl-item"><div class="cl-dot green"></div><span>Tombol <b>⚡ Fill Items</b> otomatis muncul di sebelah Search button di halaman Give Item (single &amp; multi chars)</span></div>
-              <div class="cl-item"><div class="cl-dot green"></div><span>Support <b>Give Item Multi Chars</b> — mode=0 dan mode=1</span></div>
-              <div class="cl-item"><div class="cl-dot green"></div><span>✅ <b>Universal</b> — bekerja di semua server GameCP RF (<b>*.gamecp.net</b>), bukan hanya 1 domain</span></div>
-              <div class="cl-item"><div class="cl-dot orange"></div><span>Fix popup dobel — <b>service worker</b> kini simpan windowId ke <code>storage.session</code> agar tidak hilang saat Chrome terminate background</span></div>
-              <div class="cl-item"><div class="cl-dot orange"></div><span>Fix Select2 label — pakai <code>initSelection</code> asli agar nama item muncul dengan benar via AJAX ke server</span></div>
-            </div>
-          </div>
-
-          <!-- v3.2.8 -->
-          <div class="cl-version">
-            <div class="cl-ver-header">
-              <span class="cl-ver-badge">v3.2.8</span>
-              <span style="font-size:11px;color:var(--text2);font-weight:500;">Medium Overhaul</span>
-              <span class="cl-ver-date">2026</span>
-            </div>
-            <div class="cl-items">
-              <div class="cl-item"><div class="cl-dot green"></div><span>Weapon selector berdasarkan <b>type</b> (Knife/Sword/Spear/Axe/Hammer/Staff/Bow/Firearm/Launcher/Flamethrower/Grenade/Throwing) — pilih type, extension cari otomatis di halaman</span></div>
-              <div class="cl-item"><div class="cl-dot green"></div><span>✅ <b>Universal</b> — item dicari via <b>keyword nama</b>, bukan hardcode value. Kompatibel dengan semua GameCP RF, bukan hanya 1 domain</span></div>
-              <div class="cl-item"><div class="cl-dot green"></div><span>Accessories (Shield, Booster, Amulet, Ring) digabung 1 tombol — pilih <b>Defense</b> atau <b>Avoid</b> sekaligus</span></div>
-            </div>
-          </div>
-
-          <!-- v3.2.7 -->
-          <div class="cl-version">
-            <div class="cl-ver-header">
-              <span class="cl-ver-badge">v3.2.7</span>
-              <span style="font-size:11px;color:var(--text2);font-weight:500;">Bulk Insert Medium</span>
-              <span class="cl-ver-date">2026</span>
-            </div>
-            <div class="cl-items">
-              <div class="cl-item"><div class="cl-dot green"></div><span>Fitur baru: <b>Bulk Insert Medium</b> — insert paket medium ke banyak player sekaligus</span></div>
-              <div class="cl-item"><div class="cl-dot green"></div><span>Pilih Weapon [1], Weapon [2], Armor, Shield, Booster, Amulet, Ring per player atau seragam semua</span></div>
-              <div class="cl-item"><div class="cl-dot green"></div><span>Support batch paralel &amp; progress bar</span></div>
-              <div class="cl-item"><div class="cl-dot green"></div><span>Auto skip jika character tidak ditemukan atau sudah claim</span></div>
-            </div>
-          </div>
-
-          <!-- v3.2.6 -->
-          <div class="cl-version">
-            <div class="cl-ver-header">
-              <span class="cl-ver-badge">v3.2.6</span>
-              <span style="font-size:11px;color:var(--text2);font-weight:500;">UI Redesign</span>
-              <span class="cl-ver-date">2026</span>
-            </div>
-            <div class="cl-items">
-              <div class="cl-item"><div class="cl-dot green"></div><span>Redesign UI popup launcher — tampilan lebih modern & compact</span></div>
-              <div class="cl-item"><div class="cl-dot green"></div><span>Redesign UI Bulk CPT, Bulk Insert High, Bulk Change Race</span></div>
-              <div class="cl-item"><div class="cl-dot green"></div><span>Redesign panel EZ Fix — header, player chip, scan list, type buttons</span></div>
-              <div class="cl-item"><div class="cl-dot"></div><span>Semua fungsi &amp; logika tidak berubah</span></div>
-            </div>
-          </div>
-
-          <!-- v3.2.4 -->
-          <div class="cl-version">
-            <div class="cl-ver-header">
-              <span class="cl-ver-badge">v3.2.4</span>
-              <span style="font-size:11px;color:var(--text2);font-weight:500;">EZ Fix — Edit Inventory</span>
-              <span class="cl-ver-date">2026</span>
-            </div>
-            <div class="cl-items">
-              <div class="cl-item"><div class="cl-dot green"></div><span>Support <b>New Version</b> edit inventory (Select2 dropdown) — scan &amp; fix item code</span></div>
-              <div class="cl-item"><div class="cl-dot green"></div><span>Fix focus/scroll ke elemen Select2 saat klik item di panel EZ Fix</span></div>
-              <div class="cl-item"><div class="cl-dot green"></div><span>Fix posisi popup weapon selector untuk New Version</span></div>
-              <div class="cl-item"><div class="cl-dot orange"></div><span>Tombol <b>⚡+7 Talic</b> otomatis — muncul di setiap item upgradeable</span></div>
-              <div class="cl-item"><div class="cl-dot orange"></div><span>Klik ⚡+7: tekan [ − ] 7x lalu [ + ] 7x instan sesuai talic yang dipilih</span></div>
-              <div class="cl-item"><div class="cl-dot"></div><span>Hapus Edit Inven box dari launcher</span></div>
-              <div class="cl-item"><div class="cl-dot"></div><span>Hapus auto-update checker &amp; link GitHub</span></div>
-            </div>
-          </div>
-
-          <!-- v3.0.2 -->
-          <div class="cl-version">
-            <div class="cl-ver-header">
-              <span class="cl-ver-badge">v3.0.2</span>
-              <span style="font-size:11px;color:var(--text2);font-weight:500;">Initial Release</span>
-              <span class="cl-ver-date">2026</span>
-            </div>
-            <div class="cl-items">
-              <div class="cl-item"><div class="cl-dot green"></div><span>Bulk CPT — edit level, CPT, playtime massal</span></div>
-              <div class="cl-item"><div class="cl-dot green"></div><span>Bulk Insert High — insert paket high ke banyak player</span></div>
-              <div class="cl-item"><div class="cl-dot green"></div><span>Bulk Change Race — ganti race &amp; job massal</span></div>
-              <div class="cl-item"><div class="cl-dot green"></div><span>EZ Fix — scan &amp; fix race item inventory (Old Version)</span></div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <!-- Tab: Settings -->
-    <div class="launcher-panel" id="launcher-panel-settings">
-      <div class="body">
-
-        <!-- Card: Auto Login -->
-        <div class="card" style="margin-bottom:10px;">
-          <div class="card-title">🔐 Auto Login</div>
-          <div style="font-size:11px;color:var(--text2);margin-bottom:10px;">
-            Isi otomatis username, password, dan PIN saat membuka halaman login GCP.
-          </div>
-
-          <!-- Toggle enable -->
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-            <span style="font-size:12px;color:var(--text1);font-weight:600;">Enable Auto Login</span>
-            <label style="position:relative;display:inline-block;width:36px;height:20px;cursor:pointer;">
-              <input type="checkbox" id="autologin-toggle" style="opacity:0;width:0;height:0;position:absolute;">
-              <span id="autologin-toggle-track" style="position:absolute;inset:0;background:var(--bg0);border-radius:20px;border:1px solid var(--border);transition:background .2s;"></span>
-              <span id="autologin-toggle-thumb" style="position:absolute;top:3px;left:3px;width:12px;height:12px;background:#888;border-radius:50%;transition:transform .2s,background .2s;"></span>
-            </label>
-          </div>
-
-          <!-- Fields -->
-          <div id="autologin-fields" style="display:flex;flex-direction:column;gap:7px;">
-            <div>
-              <div style="font-size:10px;color:var(--text2);margin-bottom:3px;">Username</div>
-              <input type="text" id="autologin-username" placeholder="username GCP"
-                style="width:100%;box-sizing:border-box;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:6px 8px;font-size:12px;color:var(--text1);outline:none;" />
-            </div>
-            <div>
-              <div style="font-size:10px;color:var(--text2);margin-bottom:3px;">Password</div>
-              <input type="password" id="autologin-password" placeholder="password GCP"
-                style="width:100%;box-sizing:border-box;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:6px 8px;font-size:12px;color:var(--text1);outline:none;" />
-            </div>
-            <div>
-              <div style="font-size:10px;color:var(--text2);margin-bottom:3px;">PIN <span style="color:var(--text2);font-weight:400;">(angka saja)</span></div>
-              <input type="password" id="autologin-pin" placeholder="contoh: 123456" minlength="6" maxlength="6"
-                style="width:100%;box-sizing:border-box;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:6px 8px;font-size:12px;color:var(--text1);outline:none;" />
-            </div>
-            <div style="display:flex;gap:6px;margin-top:2px;">
-              <button id="autologin-save" style="flex:1;padding:7px;background:var(--amber);color:#000;border:none;border-radius:4px;font-size:11px;font-weight:600;cursor:pointer;">💾 Simpan</button>
-              <button id="autologin-clear" style="flex:1;padding:7px;background:var(--bg0);color:var(--text2);border:1px solid var(--border);border-radius:4px;font-size:11px;cursor:pointer;">🗑 Hapus</button>
-            </div>
-            <div id="autologin-status" style="display:none;font-size:10px;text-align:center;padding:3px;border-radius:3px;"></div>
-          </div>
-        </div>
-          <div class="card-title">🗄 Database Manager</div>
-          <div style="font-size:11px;color:var(--text2);margin-bottom:10px;">
-            Daftarkan Sheet ID Google Sheets per domain RF server.<br>
-            EZ Fix akan otomatis pakai database yang sesuai.
-          </div>
-
-          <!-- Table header -->
-          <div style="display:grid;grid-template-columns:1fr 1fr 28px;gap:4px;margin-bottom:4px;">
-            <div style="font-size:10px;font-weight:600;color:var(--text2);padding:0 4px;">DOMAIN</div>
-            <div style="font-size:10px;font-weight:600;color:var(--text2);padding:0 4px;">SHEET ID</div>
-            <div></div>
-          </div>
-
-          <!-- Rows injected by JS -->
-          <div id="db-manager-rows" style="display:flex;flex-direction:column;gap:4px;min-height:32px;">
-            <div style="font-size:11px;color:var(--text2);padding:4px;font-style:italic;">Belum ada database terdaftar.</div>
-          </div>
-
-          <!-- Add row form (hidden by default) -->
-          <div id="db-add-form" style="display:none;margin-top:10px;border-top:1px solid var(--border);padding-top:10px;">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;">
-              <div>
-                <div style="font-size:10px;color:var(--text2);margin-bottom:3px;">Domain prefix</div>
-                <div style="display:flex;align-items:center;gap:2px;">
-                  <input type="text" id="db-add-domain" placeholder="domain"
-                    style="flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:5px 7px;font-size:11px;color:var(--text1);outline:none;width:100%;box-sizing:border-box;" />
-                  <span style="font-size:10px;color:var(--text2);white-space:nowrap;">.gamecp.net</span>
-                </div>
-              </div>
-              <div>
-                <div style="font-size:10px;color:var(--text2);margin-bottom:3px;">Sheet ID</div>
-                <input type="text" id="db-add-sheetid" placeholder="104XEr2G..."
-                  style="width:100%;box-sizing:border-box;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:5px 7px;font-size:11px;color:var(--text1);outline:none;" />
-              </div>
-            </div>
-            <div style="display:flex;gap:6px;">
-              <button id="db-add-save" style="flex:1;padding:6px;background:var(--amber);color:#000;border:none;border-radius:4px;font-size:11px;font-weight:600;cursor:pointer;">💾 Simpan</button>
-              <button id="db-add-cancel" style="flex:1;padding:6px;background:var(--bg0);color:var(--text2);border:1px solid var(--border);border-radius:4px;font-size:11px;cursor:pointer;">Batal</button>
-            </div>
-            <div id="db-add-error" style="display:none;font-size:10px;color:#ed4245;margin-top:5px;"></div>
-          </div>
-
-          <!-- Add button -->
-          <button id="db-add-btn" style="margin-top:10px;width:100%;padding:7px;background:var(--bg3);color:var(--amber);border:1px dashed var(--amber-border);border-radius:4px;font-size:11px;font-weight:600;cursor:pointer;">＋ Tambah Domain</button>
-        </div>
-      </div>
-    </div>
-
+  <!-- TOP BAR -->
+  <div class="app-topbar">
+    <div class="app-topbar-icon">G</div>
+    <div class="app-topbar-title">GCP <span>TOOLS</span></div>
+    <div class="app-topbar-badge" id="local-version-badge">v4.0.1</div>
   </div>
 
+  <!-- BODY: SIDEBAR + CONTENT -->
+  <div class="app-body">
 
-  <!-- ══════════ BULK CPT ══════════ -->
-  <div id="view-cpt" class="view">
-    <div class="header">
-      <div class="header-icon">G</div>
-      <div class="header-title">Bulk <span>CPT</span></div>
-      <button class="header-back" id="back-from-cpt">‹ MENU</button>
-    </div>
-    <div class="body">
-      <div class="card">
-        <div class="card-title">Server</div>
-        <div class="domain-wrap">
-          <span class="domain-prefix">https://</span>
-          <input type="text" class="inp-domain-field" id="cpt-domain" value="" placeholder="domain" />
-          <span class="domain-suffix">.gamecp.net</span>
-        </div>
+    <!-- ── SIDEBAR ── -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-collapse-btn" id="sidebarCollapseBtn" title="Toggle sidebar">
+        <i class="sb-arrow">«</i>
       </div>
-      <div class="card">
-        <div class="card-title">Target Nilai</div>
-        <div class="row">
-          <div>
-            <label>Level</label>
-            <input type="number" id="inp-level" value="1" min="1" max="100" />
-          </div>
-          <div>
-            <label>CPT</label>
-            <input type="number" id="inp-cpt" value="15000" min="0" max="2000000" />
-          </div>
+      <div class="sidebar-nav">
+        <div class="sb-section-label">Main</div>
+        <div class="sb-item active" data-panel="dashboard">
+          <span class="sb-icon">🏠</span><span class="sb-label">Dashboard</span>
         </div>
-        <div class="checks">
-          <label><input type="checkbox" id="chk-level" checked /> Ubah Level</label>
-          <label><input type="checkbox" id="chk-cpt"   checked /> Ubah CPT</label>
+        <div class="sb-section-label">Bulk Ops</div>
+        <div class="sb-item" data-panel="cpt">
+          <span class="sb-icon">⚡</span><span class="sb-label">Bulk CPT</span>
         </div>
-        <div class="row" style="margin-top:10px;">
-          <div>
-            <label>Total Playtime (menit)</label>
-            <input type="number" id="inp-totalpt" value="0" min="0" />
-          </div>
-          <div>
-            <label>Weekly Playtime (menit)</label>
-            <input type="number" id="inp-weeklypt" value="0" min="0" />
-          </div>
+        <div class="sb-item" data-panel="package">
+          <span class="sb-icon">🎁</span><span class="sb-label">Bulk Package</span>
+          <span class="sb-badge new">4</span>
         </div>
-        <div class="checks">
-          <label><input type="checkbox" id="chk-totalpt" /> Ubah Total PT</label>
-          <label><input type="checkbox" id="chk-weeklypt" /> Ubah Weekly PT</label>
+        <div class="sb-item" data-panel="race">
+          <span class="sb-icon">⚔️</span><span class="sb-label">Bulk Race</span>
         </div>
-      </div>
-      <div class="card">
-        <div class="card-title">Nickname Players</div>
-        <textarea id="inp-names" placeholder="erzaa&#10;erzab&#10;erzac"></textarea>
-      </div>
-      <div class="card">
-        <div class="card-title">Settings</div>
-        <div class="row">
-          <div>
-            <label>Delay CF (detik)</label>
-            <input type="number" id="inp-delay" value="30" min="1" max="30" />
-          </div>
+        <div class="sb-section-label">Item Tools</div>
+        <div class="sb-item" data-panel="give">
+          <span class="sb-icon">📦</span><span class="sb-label">Give Item</span>
         </div>
-      </div>
-      <div>
-        <button class="btn-run" id="btn-run">▶ &nbsp;Jalankan</button>
-        <button class="btn-stop" id="btn-stop">■ &nbsp;Stop</button>
-        <div class="progress-wrap" id="progress-wrap">
-          <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
-          <div class="progress-footer"><span>Progress</span><span id="progress-text">0 / 0</span></div>
+        <div class="sb-item" data-panel="ezfix">
+          <span class="sb-icon">🔧</span><span class="sb-label">EZ Fix</span>
         </div>
-      </div>
-      <div class="card" style="padding:0;overflow:hidden;">
-        <div class="log-header"><div class="card-title">Log</div></div>
-        <div class="log-box" id="log-box"><span class="log-info">Log Edit Character.</span></div>
+        <div class="sb-item" data-panel="bank">
+          <span class="sb-icon">🏦</span><span class="sb-label">Bank Copy</span>
+        </div>
+
+        <div class="sb-section-label">System</div>
+        <div class="sb-item" data-panel="settings">
+          <span class="sb-icon">⚙️</span><span class="sb-label">Settings</span>
+        </div>
+        <div class="sb-item" data-panel="log">
+          <span class="sb-icon">📋</span><span class="sb-label">Log Update</span>
+        </div>
       </div>
     </div>
-    <div class="footer">Made by <a href="https://discord.com/users/334621293125304331" target="_blank">ERZA</a></div>
-  </div>
 
+    <!-- ── PANEL CONTENT ── -->
+    <div class="sidebar-content">
 
-
-  <!-- ══════════ BULK PACKAGE (HIGH + MEDIUM) ══════════ -->
-  <div id="view-race" class="view">
-    <div class="header">
-      <div class="header-icon">G</div>
-      <div class="header-title">Change <span>Race</span></div>
-      <button class="header-back" id="back-from-race">‹ MENU</button>
-    </div>
-    <div class="body">
-      <div class="card">
-        <div class="card-title">Server</div>
-        <div class="domain-wrap">
-          <span class="domain-prefix">https://</span>
-          <input type="text" class="inp-domain-field" id="race-domain" value="" placeholder="domain" />
-          <span class="domain-suffix">.gamecp.net</span>
+      <!-- ════════ DASHBOARD ════════ -->
+      <div class="sidebar-panel active" id="panel-dashboard">
+        <div class="panel-header">
+          <div class="panel-title"><span class="pt-icon">🏠</span> <span class="pt-acc">Dashboard</span></div>
+          <div class="panel-sub">GCP WARDEN · RF ONLINE</div>
         </div>
-      </div>
-      <div class="card">
-        <div class="card-title">Nickname Players</div>
-        <textarea id="race-names" placeholder="erzaa&#10;erzab&#10;erzac"></textarea>
-        <p class="hint" style="margin-top:8px;">Satu nick per baris.</p>
-      </div>
-      <div class="card">
-        <div class="card-title">Setting Race Baru</div>
-        <div style="margin-bottom:10px;">
-          <label>New Race Job</label>
-          <select id="race-new-job">
-            <option value="alR4UkxGcFFGb25yMFNESld4TFZBdz09">Bellato - Warrior</option>
-            <option value="K2hjeDNTaWlvcEU0ZjF3YTVFOTIxZz09">Bellato - Ranger</option>
-            <option value="WVN6TXhtUDhFQVJZR0U4OFh6ZUdhZz09">Bellato - Spiritualist</option>
-            <option value="STVxeHdXbGlBR3pmWU9Vb1M5Z3p4dz09">Bellato - Specialist</option>
-            <option value="YzdzcDQ3aENwR1UrLzZBUEtSNk1Rdz09">Cora - Warrior</option>
-            <option value="N1JqeWd1NmthM0FMQWx2WWhRVkdRQT09">Cora - Ranger</option>
-            <option value="SEQ0Zy8wcG1LSE5EV1NSbTdWRjAyZz09">Cora - Spiritualist</option>
-            <option value="N2NwUTNrUW44Wmo2WUN0SGNRbVZiZz09">Cora - Specialist</option>
-            <option value="TEhIVVlBcWFmYjhWc0U1ZkF1NnVFdz09">Accretia - Warrior</option>
-            <option value="VVoyRHE0OHVlSlRrVS9ZY3JiRWt3dz09">Accretia - Ranger</option>
-            <option value="a0JDUTk2VFpGTlUrSkx1SFh6NHp1UT09">Accretia - Specialist</option>
-          </select>
-        </div>
-        <div class="row">
-          <div>
-            <label>New Gender</label>
-            <select id="race-new-gender">
-              <option value="0">Male</option>
-              <option value="1">Female</option>
-            </select>
-          </div>
-          <div>
-            <label>Old Equip</label>
-            <select id="race-old-equip">
-              <option value="0">~Auto Race~</option>
-              <option value="1">Warrior</option>
-              <option value="2">Ranger</option>
-              <option value="3">Force/Launcher</option>
-            </select>
-          </div>
-        </div>
-        <div style="margin-top:10px;">
-          <label>New Equip</label>
-          <select id="race-new-equip">
-            <option value="0">~Auto Race~</option>
-            <option value="1">Warrior</option>
-            <option value="2">Ranger</option>
-            <option value="3">Force/Launcher</option>
-          </select>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-title">Settings</div>
-        <div class="row">
-          <div>
-            <label>Delay CF (detik)</label>
-            <input type="number" id="race-delay" value="30" min="5" max="60" />
-          </div>
-        </div>
-        <p class="hint">Delay diperlukan untuk menunggu Cloudflare captcha selesai.</p>
-      </div>
-      <div>
-        <button class="btn-run orange-btn" id="race-btn-run">▶ &nbsp;Change Race Now</button>
-        <button class="btn-stop" id="race-btn-stop">■ &nbsp;Stop</button>
-        <div class="progress-wrap" id="race-progress-wrap">
-          <div class="progress-bar"><div class="progress-fill" id="race-progress-fill"></div></div>
-          <div class="progress-footer"><span>Progress</span><span id="race-progress-text">0 / 0</span></div>
-        </div>
-      </div>
-      <div class="card" style="padding:0;overflow:hidden;">
-        <div class="log-header"><div class="card-title">Log</div></div>
-        <div class="log-box" id="race-log-box"><span class="log-info">Log Bulk Change Race.</span></div>
-      </div>
-    </div>
-    <div class="footer">Made by <a href="https://discord.com/users/334621293125304331" target="_blank">ERZA</a></div>
-  </div>
-
-  <div id="view-package" class="view">
-    <div class="header">
-      <div class="header-icon">G</div>
-      <div class="header-title">Bulk <span>Package</span></div>
-      <button class="header-back" id="back-from-package">‹ MENU</button>
-    </div>
-
-    <!-- Tab switcher -->
-    <div class="pkg-tabs">
-      <div class="pkg-tab active" id="pkg-tab-high">🎁 High Package</div>
-      <div class="pkg-tab purple" id="pkg-tab-medium">📦 Medium Package</div>
-    </div>
-
-    <!-- ══ TAB: HIGH ══ -->
-    <div class="pkg-panel active" id="pkg-panel-high">
-      <div class="body">
-        <div class="card">
-          <div class="card-title">Server</div>
-          <div class="domain-wrap">
-            <span class="domain-prefix">https://</span>
-            <input type="text" class="inp-domain-field" id="high-domain" value="" placeholder="domain" />
-            <span class="domain-suffix">.gamecp.net</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">Nickname Players</div>
-          <textarea id="high-names" placeholder="erzaa&#10;erzab&#10;erzac"></textarea>
-        </div>
-        <!-- Pilihan item High -->
-        <div class="card">
-          <div class="card-title">Pilihan Item</div>
-          <div class="skip-item-wrap" style="display:flex;align-items:center;gap:8px;margin-bottom:12px;padding:8px 10px;background:rgba(88,101,242,0.08);border:0.5px solid rgba(88,101,242,0.25);border-radius:7px;">
-            <input type="checkbox" id="high-skip-items" style="width:15px;height:15px;cursor:pointer;accent-color:var(--amber);" />
-            <label for="high-skip-items" style="margin:0;cursor:pointer;color:#9ba5f5;font-size:12px;font-weight:600;">Skip Item Selection</span></label>
-          </div>
-          <div id="high-item-fields">
-          <label>Weapon [1] — Excellent (pilih type)</label>
-          <select id="high-wtype0">
-            <option value="">Pilih type weapon [1]</option>
-            <option value="knife">Knife</option>
-            <option value="sword">Sword</option>
-            <option value="spear">Spear</option>
-            <option value="axe">Axe</option>
-            <option value="hammer">Hammer</option>
-            <option value="staff">Staff</option>
-            <option value="bow">Bow</option>
-            <option value="firearm">Firearm</option>
-            <option value="launcher">Launcher</option>
-            <option value="flamethrower">Flamethrower</option>
-            <option value="grenade">Grenade</option>
-            <option value="throwing">Throwing</option>
-          </select>
-          <p class="hint" id="high-wtype-label-0" style="margin-top:4px;margin-bottom:10px;min-height:14px;color:#f08080;">⚠️ Wajib dipilih</p>
-          <label>Weapon [2] — Radiant (pilih type)</label>
-          <select id="high-wtype1">
-            <option value="">Pilih type weapon [2]</option>
-            <option value="knife">Knife</option>
-            <option value="sword">Sword</option>
-            <option value="spear">Spear</option>
-            <option value="axe">Axe</option>
-            <option value="hammer">Hammer</option>
-            <option value="staff">Staff</option>
-            <option value="bow">Bow</option>
-            <option value="firearm">Firearm</option>
-            <option value="launcher">Launcher</option>
-            <option value="flamethrower">Flamethrower</option>
-            <option value="grenade">Grenade</option>
-            <option value="throwing">Throwing</option>
-          </select>
-          <p class="hint" id="high-wtype-label-1" style="margin-top:4px;margin-bottom:10px;min-height:14px;color:#f08080;">⚠️ Wajib dipilih</p>
-          <label>Armor (pilih job)</label>
-          <select id="high-armor0">
-            <option value="">~Skip / tidak dipilih~</option>
-            <option value="0">Warrior</option>
-            <option value="1">Ranger</option>
-            <option value="2">Force</option>
-          </select>
-          <label style="margin-top:12px;">Accessories — Shield, Booster, Amulet, Ring</label>
-          <select id="high-acc-select">
-            <option value="">Pilih build accessories</option>
-            <option value="defense"> Defense </option>
-            <option value="avoid"> Avoid </option>
-          </select>
-          <p class="hint" id="high-acc-label" style="margin-top:5px;min-height:14px;color:#f08080;">⚠️ Wajib dipilih</p>
-          </div><!-- end #high-item-fields -->
-        </div>
-        <div class="card">
-          <div class="card-title">Settings</div>
-          <div class="row">
-            <div>
-              <label>Delay antar insert (detik)</label>
-              <input type="number" id="high-delay" value="3" min="1" max="30" />
-            </div>
-          </div>
-          <div style="margin-top:10px;">
-            <label>Max Claim per Character</label>
+        <div class="body">
+          <!-- Update banner -->
+          <div id="update-banner" class="update-banner" style="display:none;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <input type="number" id="high-maxclaim" value="1" min="1" max="10" style="width:80px;" />
-              <div style="display:flex;gap:5px;flex:1;">
-                <div class="batch-btn" id="maxclaim-1" style="flex:1;" data-maxclaim="1">1x</div>
-                <div class="batch-btn" id="maxclaim-2" style="flex:1;" data-maxclaim="2">2x</div>
-                <div class="batch-btn" id="maxclaim-3" style="flex:1;" data-maxclaim="3">3x</div>
-              </div>
-            </div>
-          </div>
-          <p class="hint">Max Claim = batas claim yang diizinkan sebelum skip.</p>
-        </div>
-        <div>
-          <button class="btn-run green-btn" id="high-btn-run">▶ &nbsp;Insert High Now</button>
-          <button class="btn-stop" id="high-btn-stop">■ &nbsp;Stop</button>
-          <div class="progress-wrap" id="high-progress-wrap">
-            <div class="progress-bar"><div class="progress-fill" id="high-progress-fill"></div></div>
-            <div class="progress-footer"><span>Progress</span><span id="high-progress-text">0 / 0</span></div>
-          </div>
-        </div>
-        <div class="card" style="padding:0;overflow:hidden;">
-          <div class="log-header"><div class="card-title">Log</div></div>
-          <div class="log-box" id="high-log-box"><span class="log-info">Log Insert High.</span></div>
-        </div>
-      </div>
-      <div class="footer">Made by <a href="https://discord.com/users/334621293125304331" target="_blank">ERZA</a></div>
-    </div>
-
-    <!-- ══ TAB: MEDIUM ══ -->
-    <div class="pkg-panel" id="pkg-panel-medium">
-      <div class="body">
-        <div class="card">
-          <div class="card-title">Server</div>
-          <div class="domain-wrap">
-            <span class="domain-prefix">https://</span>
-            <input type="text" class="inp-domain-field" id="medium-domain" value="" placeholder="domain" />
-            <span class="domain-suffix">.gamecp.net</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">Nickname Players</div>
-          <textarea id="medium-names" placeholder="erzaa&#10;erzab&#10;erzac"></textarea>
-        </div>
-        <div class="card">
-          <div class="card-title">Pilihan Item</div>
-          <div class="skip-item-wrap" style="display:flex;align-items:center;gap:8px;margin-bottom:12px;padding:8px 10px;background:rgba(88,101,242,0.08);border:0.5px solid rgba(88,101,242,0.25);border-radius:7px;">
-            <input type="checkbox" id="medium-skip-items" style="width:15px;height:15px;cursor:pointer;accent-color:var(--amber);" />
-            <label for="medium-skip-items" style="margin:0;cursor:pointer;color:#9ba5f5;font-size:12px;font-weight:600;">Skip Item Selection</span></label>
-          </div>
-          <div id="medium-item-fields">
-          <label>Weapon [1] — Excellent (pilih type)</label>
-          <select id="medium-wtype0">
-            <option value="">Pilih type weapon [1]</option>
-            <option value="knife">Knife</option>
-            <option value="sword">Sword</option>
-            <option value="spear">Spear</option>
-            <option value="axe">Axe</option>
-            <option value="hammer">Hammer</option>
-            <option value="staff">Staff</option>
-            <option value="bow">Bow</option>
-            <option value="firearm">Firearm</option>
-            <option value="launcher">Launcher</option>
-            <option value="flamethrower">Flamethrower</option>
-            <option value="grenade">Grenade</option>
-            <option value="throwing">Throwing</option>
-          </select>
-          <p class="hint" id="medium-wtype-label-0" style="margin-top:4px;margin-bottom:10px;min-height:14px;color:#f08080;">⚠️ Wajib dipilih</p>
-          <label>Weapon [2] — Radiant (pilih type)</label>
-          <select id="medium-wtype1">
-            <option value="">Pilih type weapon [2]</option>
-            <option value="knife">Knife</option>
-            <option value="sword">Sword</option>
-            <option value="spear">Spear</option>
-            <option value="axe">Axe</option>
-            <option value="hammer">Hammer</option>
-            <option value="staff">Staff</option>
-            <option value="bow">Bow</option>
-            <option value="firearm">Firearm</option>
-            <option value="launcher">Launcher</option>
-            <option value="flamethrower">Flamethrower</option>
-            <option value="grenade">Grenade</option>
-            <option value="throwing">Throwing</option>
-          </select>
-          <p class="hint" id="medium-wtype-label-1" style="margin-top:4px;margin-bottom:10px;min-height:14px;color:#f08080;">⚠️ Wajib dipilih</p>
-          <label>Armor (pilih job)</label>
-          <select id="medium-armor0">
-            <option value="">~Skip / tidak dipilih~</option>
-            <option value="0">Warrior</option>
-            <option value="1">Ranger</option>
-            <option value="2">Force</option>
-          </select>
-          <label style="margin-top:12px;">Accessories — Shield, Booster, Amulet, Ring</label>
-          <select id="medium-acc-select">
-            <option value="">Pilih build accessories</option>
-            <option value="defense"> Defense </option>
-            <option value="avoid"> Avoid </option>
-          </select>
-          <p class="hint" id="medium-acc-label" style="margin-top:5px;min-height:14px;">⚠️ Wajib dipilih</p>
-          </div><!-- end #medium-item-fields -->
-        </div>
-        <div class="card">
-          <div class="card-title">Settings</div>
-          <div class="row">
-            <div>
-              <label>Delay antar insert (detik)</label>
-              <input type="number" id="medium-delay" value="3" min="1" max="30" />
-            </div>
-          </div>
-          <div style="margin-top:10px;">
-            <label>Max Claim per Character</label>
-            <div style="display:flex;align-items:center;gap:8px;">
-              <input type="number" id="medium-maxclaim" value="1" min="1" max="10" style="width:80px;" />
-              <div style="display:flex;gap:5px;flex:1;">
-                <div class="batch-btn" id="medium-maxclaim-1" style="flex:1;" data-medmaxclaim="1">1x</div>
-                <div class="batch-btn" id="medium-maxclaim-2" style="flex:1;" data-medmaxclaim="2">2x</div>
-                <div class="batch-btn" id="medium-maxclaim-3" style="flex:1;" data-medmaxclaim="3">3x</div>
-              </div>
-            </div>
-          </div>
-          <p class="hint">Max Claim = batas claim yang diizinkan sebelum skip.</p>
-        </div>
-        <div>
-          <button class="btn-run" id="medium-btn-run" style="background:#7c3aed;">▶ &nbsp;Insert Medium Now</button>
-          <button class="btn-stop" id="medium-btn-stop">■ &nbsp;Stop</button>
-          <div class="progress-wrap" id="medium-progress-wrap">
-            <div class="progress-bar"><div class="progress-fill" id="medium-progress-fill" style="background:#7c3aed;"></div></div>
-            <div class="progress-footer"><span>Progress</span><span id="medium-progress-text">0 / 0</span></div>
-          </div>
-        </div>
-        <div class="card" style="padding:0;overflow:hidden;">
-          <div class="log-header"><div class="card-title">Log</div></div>
-          <div class="log-box" id="medium-log-box"><span class="log-info">Log Insert Medium.</span></div>
-        </div>
-      </div>
-      <div class="footer">Made by <a href="https://discord.com/users/334621293125304331" target="_blank">ERZA</a></div>
-    </div>
-  </div>
-
-
-
-  <!-- ══════════ GIVE ITEM ══════════ -->
-  <div id="view-give" class="view">
-    <div class="header">
-      <div class="header-icon">G</div>
-      <div class="header-title">Give <span>Item</span></div>
-      <button class="header-back" id="back-from-give">‹ MENU</button>
-    </div>
-
-    <div class="body" id="give-inner">
-
-      <!-- SERVER -->
-      <div class="card">
-        <div class="card-title">Server</div>
-        <div class="domain-wrap">
-          <span class="domain-prefix">https://</span>
-          <input type="text" class="inp-domain-field" id="give-domain" value="" placeholder="domain" />
-          <span class="domain-suffix">.gamecp.net</span>
-        </div>
-      </div>
-
-      <!-- TARGET CHAR -->
-      <div class="card">
-        <div class="card-title">Target Character</div>
-        <input type="text" id="give-char-name" placeholder="Nickname"
-          style="width:100%;box-sizing:border-box;" />
-      </div>
-
-      <!-- TABS -->
-      <div class="card" style="padding:0;overflow:hidden;">
-        <div style="display:flex;border-bottom:0.5px solid var(--border);">
-          <div class="give-tab active" data-gtab="give-tab-items"
-            style="flex:1;padding:9px 4px;text-align:center;font-size:11px;font-weight:700;letter-spacing:0.5px;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;transition:all 0.2s;background:var(--bg2);">
-            📦 ITEMS
-          </div>
-          <div class="give-tab" data-gtab="give-tab-preset"
-            style="flex:1;padding:9px 4px;text-align:center;font-size:11px;font-weight:700;letter-spacing:0.5px;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;transition:all 0.2s;background:var(--bg2);">
-            ⭐ PRESET
-          </div>
-          <div class="give-tab" data-gtab="give-tab-help"
-            style="flex:1;padding:9px 4px;text-align:center;font-size:11px;font-weight:700;letter-spacing:0.5px;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;transition:all 0.2s;background:var(--bg2);">
-            ❓ HELP
-          </div>
-        </div>
-
-        <!-- ── ITEMS TAB ── -->
-        <div id="give-tab-items" class="give-tab-content" style="display:flex;flex-direction:column;">
-
-          <!-- Toolbar -->
-          <div style="padding:7px 12px;background:var(--bg2);border-bottom:0.5px solid var(--border);display:flex;align-items:center;gap:6px;">
-            <div style="flex:1;font-size:11px;color:var(--text2);font-family:monospace;">
-              Items: <span id="give-item-count">0</span>&nbsp;|&nbsp;Sel: <span id="give-selected-count">0</span>
-            </div>
-            <button class="give-toolbar-btn" id="give-btn-select-all">ALL</button>
-            <button class="give-toolbar-btn" id="give-btn-clear-sel">NONE</button>
-            <button class="give-toolbar-btn" id="give-btn-refresh" title="Reload dari bank scan">🔄</button>
-            <button class="give-toolbar-btn give-btn-danger" id="give-btn-clear-data" title="Hapus semua data">🗑</button>
-          </div>
-
-          <!-- Item list -->
-          <div id="give-item-list"
-            style="overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:5px;min-height:80px;max-height:180px;">
-            <div class="give-empty-state">
-              <div style="font-size:26px;opacity:.4;margin-bottom:6px;">📋</div>
-              <div style="font-size:12px;font-weight:600;margin-bottom:3px;">No Items Loaded</div>
-              <div style="font-size:11px;color:var(--text3);line-height:1.6;">Buka <b>Bank Remove</b> → klik <b>Copy Bank Items</b><br>atau load preset di bawah</div>
-            </div>
-          </div>
-
-          <!-- Preset quick-load header -->
-          <div style="padding:6px 12px;background:var(--bg2);border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border);display:flex;align-items:center;gap:8px;">
-            <div style="flex:1;font-size:10px;font-weight:700;color:var(--text2);letter-spacing:1.5px;">⭐ LOAD FROM PRESET</div>
-            <span id="give-items-preset-count" style="font-size:10px;color:var(--text2);font-family:monospace;"></span>
-          </div>
-
-          <!-- Preset quick-load list -->
-          <div id="give-items-preset-list"
-            style="overflow-y:auto;padding:6px 8px;display:flex;flex-direction:column;gap:4px;max-height:100px;background:var(--bg1);">
-            <div class="give-empty-state" style="padding:8px;">
-              <div style="font-size:11px;color:var(--text3);">Belum ada preset. Buat di tab <b>PRESET</b>.</div>
-            </div>
-          </div>
-
-          <!-- Fill button + status -->
-          <div style="padding:10px 12px;border-top:0.5px solid var(--border);background:var(--bg2);">
-            <button id="give-btn-fill" disabled
-              style="width:100%;padding:9px;border:none;border-radius:6px;font-family:inherit;font-size:13px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:all 0.2s;background:linear-gradient(135deg,#c0392b,#8e1a0e);color:white;box-shadow:0 2px 8px rgba(192,57,43,0.3);opacity:0.5;">
-              ⚡ FILL GIVE ITEM
-            </button>
-          </div>
-          <div id="give-status-bar"
-            style="padding:5px 12px;font-size:11px;font-family:monospace;min-height:22px;color:var(--text2);background:var(--bg1);border-top:0.5px solid var(--border);">
-            Ready.
-          </div>
-        </div>
-
-        <!-- ── PRESET TAB ── -->
-        <div id="give-tab-preset" class="give-tab-content" style="display:none;flex-direction:column;">
-
-          <!-- Build form -->
-          <div style="padding:10px 12px;background:var(--bg2);border-bottom:0.5px solid var(--border);display:flex;flex-direction:column;gap:8px;">
-            <div style="font-size:10px;font-weight:700;color:var(--text2);letter-spacing:2px;">BUILD PRESET</div>
-
-            <div>
-              <label style="font-size:10px;color:var(--text2);display:block;margin-bottom:4px;">PRESET NAME</label>
-              <input class="give-input" id="give-preset-name" type="text" placeholder="Nama preset..." style="width:100%;box-sizing:border-box;" />
-            </div>
-
-            <div style="display:flex;gap:6px;">
-              <div style="flex:2;">
-                <label style="font-size:10px;color:var(--text2);display:block;margin-bottom:4px;">ITEM CODE</label>
-                <input class="give-input" id="give-pi-code" type="text" placeholder="Item Code" style="width:100%;box-sizing:border-box;" />
-              </div>
+              <span style="font-size:16px;">🔔</span>
               <div style="flex:1;">
-                <label style="font-size:10px;color:var(--text2);display:block;margin-bottom:4px;">QTY</label>
-                <input class="give-input" id="give-pi-qty" type="number" value="1" min="1" style="width:100%;box-sizing:border-box;" />
+                <div style="font-size:11px;font-weight:700;color:#7289da;">Update Tersedia!</div>
+                <div id="update-banner-notes" style="font-size:10px;color:var(--text3);margin-top:1px;"></div>
+              </div>
+              <a id="update-banner-link" href="#" target="_blank" style="font-size:10px;font-weight:700;color:var(--acc);text-decoration:none;background:var(--acc-glow);padding:3px 8px;border-radius:4px;border:1px solid var(--acc-border);white-space:nowrap;">Download →</a>
+            </div>
+          </div>
+          <!-- License card -->
+          <div id="license-info-strip" class="lic-card" style="display:none;">
+            <div class="lic-card-header">
+              <div class="lic-card-badge">
+                <div class="dot"></div>
+                <span>ACTIVE</span>
+              </div>
+              <div class="lic-card-owner" id="lic-card-owner">—</div>
+              <div class="lic-card-plan" id="lic-card-plan">—</div>
+            </div>
+            <div class="lic-card-meta">
+              <div class="lic-meta-item">
+                <div class="lic-meta-label">Expires</div>
+                <div class="lic-meta-value green" id="lic-card-expires">—</div>
+              </div>
+              <div class="lic-meta-item">
+                <div class="lic-meta-label">Status</div>
+                <div class="lic-meta-value acc" id="lic-card-status">Validated</div>
               </div>
             </div>
+            <div class="lic-card-footer">
+              <div class="lic-card-key" id="lic-card-key">XXXX-XXXX-XXXX-XXXX</div>
+              <button class="lic-deactivate-btn" id="lic-strip-logout">🖥 Deactivate</button>
+            </div>
+          </div>
+          <!-- Server -->
+          <div class="card">
+            <div class="card-title">Server</div>
+            <div class="domain-wrap">
+              <span class="domain-prefix">https://</span>
+              <input type="text" class="inp-domain-field" id="launcher-domain" value="" placeholder="domain" />
+              <span class="domain-suffix">.gamecp.net</span>
+            </div>
+          </div>
+          <!-- Quick access -->
+          <div class="card">
+            <div class="card-title">Quick Access</div>
+            <div class="quick-grid">
+              <div class="quick-btn" data-panel="cpt"><span class="qb-icon icon-blue">⚡</span><span class="qb-label">Bulk CPT</span></div>
+              <div class="quick-btn" data-panel="package"><span class="qb-icon icon-green">🎁</span><span class="qb-label">Package</span></div>
+              <div class="quick-btn" data-panel="race"><span class="qb-icon icon-orange">⚔️</span><span class="qb-label">Bulk Race</span></div>
+              <div class="quick-btn" data-panel="give"><span class="qb-icon icon-red">📦</span><span class="qb-label">Give Item</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="footer">Made by <a href="https://discord.com/users/334621293125304331" target="_blank">ERZA</a></div>
+      </div>
 
-            <div style="display:flex;gap:6px;align-items:flex-end;">
-              <div>
-                <label style="font-size:10px;color:var(--text2);display:block;margin-bottom:4px;">UPGRADE</label>
-                <select class="give-select" id="give-pi-upg">
-                  <option value="0">+0</option><option value="1">+1</option><option value="2">+2</option>
-                  <option value="3">+3</option><option value="4">+4</option><option value="5">+5</option>
-                  <option value="6">+6</option><option value="7">+7</option>
-                </select>
-              </div>
-              <div>
-                <label style="font-size:10px;color:var(--text2);display:block;margin-bottom:4px;">SLOTS</label>
-                <select class="give-select" id="give-pi-slots">
-                  <option value="0">0</option><option value="1">1</option><option value="2">2</option>
-                  <option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option>
-                </select>
-              </div>
-              <div style="flex:1;">
-                <label style="font-size:10px;color:var(--text2);display:block;margin-bottom:4px;">TALIC</label>
-                <select class="give-select" id="give-pi-talic" style="width:100%;">
-                  <option value="1">No Talic</option><option value="2">Rebirth</option><option value="3">Mercy</option>
-                  <option value="4">Grace</option><option value="5">Glory</option><option value="6">Guard</option>
-                  <option value="7">Belief</option><option value="8">Sacred Flame</option><option value="9">Wisdom</option>
-                  <option value="10">Favor</option><option value="11">Hatred</option><option value="12">Chaos</option>
-                  <option value="13">Darkness</option><option value="14">Destruction</option><option value="15">Ignorant</option>
-                </select>
+      <!-- ════════ BULK CPT ════════ -->
+      <div class="sidebar-panel" id="panel-cpt">
+        <div class="panel-header">
+          <div class="panel-title"><span class="pt-icon">⚡</span> Bulk <span class="pt-acc">CPT</span></div>
+          <div class="panel-sub">Edit level · CPT · playtime massal</div>
+        </div>
+        <div class="body">
+          <div class="card">
+            <div class="card-title">Server</div>
+            <div class="domain-wrap">
+              <span class="domain-prefix">https://</span>
+              <input type="text" class="inp-domain-field" id="cpt-domain" value="" placeholder="domain" />
+              <span class="domain-suffix">.gamecp.net</span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Target Nilai</div>
+            <div class="row">
+              <div><label>Level</label><input type="number" id="inp-level" value="1" min="1" max="100" /></div>
+              <div><label>CPT</label><input type="number" id="inp-cpt" value="15000" min="0" max="2000000" /></div>
+            </div>
+            <div class="checks">
+              <label><input type="checkbox" id="chk-level" checked /> Ubah Level</label>
+              <label><input type="checkbox" id="chk-cpt"   checked /> Ubah CPT</label>
+            </div>
+            <div class="row" style="margin-top:10px;">
+              <div><label>Total Playtime (menit)</label><input type="number" id="inp-totalpt" value="0" min="0" /></div>
+              <div><label>Weekly Playtime (menit)</label><input type="number" id="inp-weeklypt" value="0" min="0" /></div>
+            </div>
+            <div class="checks">
+              <label><input type="checkbox" id="chk-totalpt" /> Ubah Total PT</label>
+              <label><input type="checkbox" id="chk-weeklypt" /> Ubah Weekly PT</label>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Nickname Players</div>
+            <textarea id="inp-names" placeholder="erzaa&#10;erzab&#10;erzac"></textarea>
+          </div>
+          <div class="card">
+            <div class="card-title">Settings</div>
+            <div class="row"><div><label>Delay CF (detik)</label><input type="number" id="inp-delay" value="30" min="1" max="30" /></div></div>
+          </div>
+          <div>
+            <button class="btn-run" id="btn-run">▶ &nbsp;Jalankan</button>
+            <button class="btn-stop" id="btn-stop">■ &nbsp;Stop</button>
+            <div class="progress-wrap" id="progress-wrap">
+              <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+              <div class="progress-footer"><span>Progress</span><span id="progress-text">0 / 0</span></div>
+            </div>
+          </div>
+          <div class="card" style="padding:0;overflow:hidden;">
+            <div class="log-header"><div class="card-title">Log</div></div>
+            <div class="log-box" id="log-box"><span class="log-info">Log Edit Character.</span></div>
+          </div>
+        </div>
+        <div class="footer">Made by <a href="https://discord.com/users/334621293125304331" target="_blank">ERZA</a></div>
+      </div>
+
+      <!-- ════════ BULK PACKAGE ════════ -->
+      <div class="sidebar-panel" id="panel-package">
+        <div class="panel-header">
+          <div class="panel-title"><span class="pt-icon">🎁</span> Bulk <span class="pt-acc">Package</span></div>
+          <div class="panel-sub">Insert paket ke banyak player</div>
+        </div>
+        <!-- Tab switcher -->
+        <div class="pkg-tabs">
+          <div class="pkg-tab active" id="pkg-tab-high">🎁 High</div>
+          <div class="pkg-tab purple" id="pkg-tab-medium">📦 Medium</div>
+          <div class="pkg-tab disabled-tab" id="pkg-tab-special" title="Fitur belum tersedia">👑 Special</div>
+          <div class="pkg-tab disabled-tab" id="pkg-tab-retail" title="Fitur belum tersedia">🛒 Retail</div>
+        </div>
+
+        <!-- ── HIGH ── -->
+        <div class="pkg-panel active" id="pkg-panel-high">
+          <div class="body">
+            <div class="card">
+              <div class="card-title">Server</div>
+              <div class="domain-wrap">
+                <span class="domain-prefix">https://</span>
+                <input type="text" class="inp-domain-field" id="high-domain" value="" placeholder="domain" />
+                <span class="domain-suffix">.gamecp.net</span>
               </div>
             </div>
-
-            <!-- Bulk Add section -->
-            <details id="give-bulk-section" style="background:rgba(41,128,185,0.06);border:0.5px solid rgba(41,128,185,0.25);border-radius:7px;padding:0;">
-              <summary style="cursor:pointer;font-size:10px;font-weight:700;color:#5b9bd5;letter-spacing:1px;padding:6px 10px;list-style:none;display:flex;align-items:center;gap:5px;user-select:none;">
-                <span id="give-bulk-arrow" style="transition:transform 0.2s;display:inline-block;">▶</span> BULK ADD (multi item code)
-              </summary>
-              <div style="padding:8px 10px 10px;display:flex;flex-direction:column;gap:6px;">
-                <div style="font-size:10px;color:var(--text3);font-family:monospace;letter-spacing:0.3px;color:#E3BD37;">
-                  code &nbsp;<span style="color:#E3BD37;">qty</span> &nbsp;<span style="color:#E3BD37;">[+upg] [slots] [Talic]</span>
-                </div>
-                <textarea id="give-bulk-codes" rows="5"
-                  placeholder="ipwhp01 99&#10;iwaxb50 1 +7 6 Ignorant"
-                  style="width:100%;box-sizing:border-box;background:var(--bg0);border:0.5px solid var(--border);border-radius:6px;color:var(--text1);font-size:11px;font-family:monospace;padding:6px 8px;resize:vertical;line-height:1.6;outline:none;"></textarea>
-                <div style="display:flex;gap:6px;align-items:center;">
-                  <div style="display:flex;align-items:center;gap:5px;">
-                    <label style="font-size:10px;color:var(--text2);">DEFAULT QTY:</label>
-                    <input id="give-bulk-qty" type="number" value="1" min="1"
-                      style="width:54px;background:var(--bg0);border:0.5px solid var(--border);border-radius:6px;color:var(--text1);font-size:11px;padding:4px 6px;outline:none;" />
+            <div class="card">
+              <div class="card-title">Nickname Players</div>
+              <textarea id="high-names" placeholder="erzaa&#10;erzab&#10;erzac"></textarea>
+            </div>
+            <div class="card">
+              <div class="card-title">Pilihan Item</div>
+              <div class="skip-item-wrap" style="display:flex;align-items:center;gap:8px;margin-bottom:12px;padding:8px 10px;background:rgba(88,101,242,0.08);border:0.5px solid rgba(88,101,242,0.25);border-radius:7px;">
+                <input type="checkbox" id="high-skip-items" style="width:15px;height:15px;cursor:pointer;accent-color:var(--acc);" />
+                <label for="high-skip-items" style="margin:0;cursor:pointer;color:#9ba5f5;font-size:12px;font-weight:600;">Skip Item Selection</label>
+              </div>
+              <div id="high-item-fields">
+                <label>Weapon [1] — Excellent (pilih type)</label>
+                <select id="high-wtype0">
+                  <option value="">Pilih type weapon [1]</option>
+                  <option value="knife">Knife</option><option value="sword">Sword</option>
+                  <option value="spear">Spear</option><option value="axe">Axe</option>
+                  <option value="hammer">Hammer</option><option value="staff">Staff</option>
+                  <option value="bow">Bow</option><option value="firearm">Firearm</option>
+                  <option value="launcher">Launcher</option><option value="flamethrower">Flamethrower</option>
+                  <option value="grenade">Grenade</option><option value="throwing">Throwing</option>
+                </select>
+                <p class="hint" id="high-wtype-label-0" style="margin-top:4px;margin-bottom:10px;min-height:14px;color:#f08080;">⚠️ Wajib dipilih</p>
+                <label>Weapon [2] — Radiant (pilih type)</label>
+                <select id="high-wtype1">
+                  <option value="">Pilih type weapon [2]</option>
+                  <option value="knife">Knife</option><option value="sword">Sword</option>
+                  <option value="spear">Spear</option><option value="axe">Axe</option>
+                  <option value="hammer">Hammer</option><option value="staff">Staff</option>
+                  <option value="bow">Bow</option><option value="firearm">Firearm</option>
+                  <option value="launcher">Launcher</option><option value="flamethrower">Flamethrower</option>
+                  <option value="grenade">Grenade</option><option value="throwing">Throwing</option>
+                </select>
+                <p class="hint" id="high-wtype-label-1" style="margin-top:4px;margin-bottom:10px;min-height:14px;color:#f08080;">⚠️ Wajib dipilih</p>
+                <label>Armor (pilih job)</label>
+                <select id="high-armor0">
+                  <option value="">~Skip / tidak dipilih~</option>
+                  <option value="0">Warrior</option><option value="1">Ranger</option><option value="2">Force</option>
+                </select>
+                <label style="margin-top:12px;">Accessories — Shield, Booster, Amulet, Ring</label>
+                <select id="high-acc-select">
+                  <option value="">Pilih build accessories</option>
+                  <option value="defense"> Defense </option><option value="avoid"> Avoid </option>
+                </select>
+                <p class="hint" id="high-acc-label" style="margin-top:5px;min-height:14px;color:#f08080;">⚠️ Wajib dipilih</p>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-title">Settings</div>
+              <div class="row"><div><label>Delay antar insert (detik)</label><input type="number" id="high-delay" value="3" min="1" max="30" /></div></div>
+              <div style="margin-top:10px;">
+                <label>Max Claim per Character</label>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <input type="number" id="high-maxclaim" value="1" min="1" max="10" style="width:80px;" />
+                  <div style="display:flex;gap:5px;flex:1;">
+                    <div class="batch-btn" id="maxclaim-1" style="flex:1;" data-maxclaim="1">1x</div>
+                    <div class="batch-btn" id="maxclaim-2" style="flex:1;" data-maxclaim="2">2x</div>
+                    <div class="batch-btn" id="maxclaim-3" style="flex:1;" data-maxclaim="3">3x</div>
                   </div>
-                  <button class="give-action-btn give-btn-blue" id="give-btn-bulk-add" style="flex:1;">⚡ BULK ADD</button>
                 </div>
-                <div id="give-bulk-status" style="font-size:10px;color:var(--text2);min-height:14px;"></div>
               </div>
-            </details>
-
-            <!-- Staging chips -->
-            <div id="give-staging-list" style="display:flex;flex-wrap:wrap;gap:4px;min-height:16px;"></div>
-
-            <!-- Action buttons -->
-            <div style="display:flex;gap:6px;">
-              <button class="give-action-btn give-btn-blue" id="give-btn-add-stage" style="flex:1;">+ ADD</button>
-              <button class="give-action-btn" id="give-btn-clear-stage"
-                style="padding:6px 10px;font-size:11px;background:var(--bg0);border:0.5px solid var(--border);color:var(--text2);border-radius:6px;cursor:pointer;">CLEAR</button>
-              <button class="give-action-btn give-btn-purple" id="give-btn-save-preset" style="flex:1;">💾 SAVE</button>
+              <p class="hint">Max Claim = batas claim yang diizinkan sebelum skip.</p>
+            </div>
+            <div>
+              <button class="btn-run green-btn" id="high-btn-run">▶ &nbsp;Insert High Now</button>
+              <button class="btn-stop" id="high-btn-stop">■ &nbsp;Stop</button>
+              <div class="progress-wrap" id="high-progress-wrap">
+                <div class="progress-bar"><div class="progress-fill" id="high-progress-fill"></div></div>
+                <div class="progress-footer"><span>Progress</span><span id="high-progress-text">0 / 0</span></div>
+              </div>
+            </div>
+            <div class="card" style="padding:0;overflow:hidden;">
+              <div class="log-header"><div class="card-title">Log</div></div>
+              <div class="log-box" id="high-log-box"><span class="log-info">Log Insert High.</span></div>
             </div>
           </div>
+          <div class="footer">Made by <a href="https://discord.com/users/334621293125304331" target="_blank">ERZA</a></div>
+        </div>
 
-          <!-- Saved presets header -->
-          <div style="padding:6px 12px;background:var(--bg2);border-bottom:0.5px solid var(--border);display:flex;align-items:center;">
-            <div style="flex:1;font-size:10px;font-weight:700;color:var(--text2);letter-spacing:1.5px;">SAVED PRESETS</div>
-            <span id="give-preset-count" style="font-size:10px;color:var(--text2);font-family:monospace;"></span>
+        <!-- ── MEDIUM ── -->
+        <div class="pkg-panel" id="pkg-panel-medium">
+          <div class="body">
+            <div class="card">
+              <div class="card-title">Server</div>
+              <div class="domain-wrap">
+                <span class="domain-prefix">https://</span>
+                <input type="text" class="inp-domain-field" id="medium-domain" value="" placeholder="domain" />
+                <span class="domain-suffix">.gamecp.net</span>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-title">Nickname Players</div>
+              <textarea id="medium-names" placeholder="erzaa&#10;erzab&#10;erzac"></textarea>
+            </div>
+            <div class="card">
+              <div class="card-title">Pilihan Item</div>
+              <div class="skip-item-wrap" style="display:flex;align-items:center;gap:8px;margin-bottom:12px;padding:8px 10px;background:rgba(88,101,242,0.08);border:0.5px solid rgba(88,101,242,0.25);border-radius:7px;">
+                <input type="checkbox" id="medium-skip-items" style="width:15px;height:15px;cursor:pointer;accent-color:var(--acc);" />
+                <label for="medium-skip-items" style="margin:0;cursor:pointer;color:#9ba5f5;font-size:12px;font-weight:600;">Skip Item Selection</label>
+              </div>
+              <div id="medium-item-fields">
+                <label>Weapon [1] — Excellent (pilih type)</label>
+                <select id="medium-wtype0">
+                  <option value="">Pilih type weapon [1]</option>
+                  <option value="knife">Knife</option><option value="sword">Sword</option>
+                  <option value="spear">Spear</option><option value="axe">Axe</option>
+                  <option value="hammer">Hammer</option><option value="staff">Staff</option>
+                  <option value="bow">Bow</option><option value="firearm">Firearm</option>
+                  <option value="launcher">Launcher</option><option value="flamethrower">Flamethrower</option>
+                  <option value="grenade">Grenade</option><option value="throwing">Throwing</option>
+                </select>
+                <p class="hint" id="medium-wtype-label-0" style="margin-top:4px;margin-bottom:10px;min-height:14px;color:#f08080;">⚠️ Wajib dipilih</p>
+                <label>Weapon [2] — Radiant (pilih type)</label>
+                <select id="medium-wtype1">
+                  <option value="">Pilih type weapon [2]</option>
+                  <option value="knife">Knife</option><option value="sword">Sword</option>
+                  <option value="spear">Spear</option><option value="axe">Axe</option>
+                  <option value="hammer">Hammer</option><option value="staff">Staff</option>
+                  <option value="bow">Bow</option><option value="firearm">Firearm</option>
+                  <option value="launcher">Launcher</option><option value="flamethrower">Flamethrower</option>
+                  <option value="grenade">Grenade</option><option value="throwing">Throwing</option>
+                </select>
+                <p class="hint" id="medium-wtype-label-1" style="margin-top:4px;margin-bottom:10px;min-height:14px;color:#f08080;">⚠️ Wajib dipilih</p>
+                <label>Armor (pilih job)</label>
+                <select id="medium-armor0">
+                  <option value="">~Skip / tidak dipilih~</option>
+                  <option value="0">Warrior</option><option value="1">Ranger</option><option value="2">Force</option>
+                </select>
+                <label style="margin-top:12px;">Accessories — Shield, Booster, Amulet, Ring</label>
+                <select id="medium-acc-select">
+                  <option value="">Pilih build accessories</option>
+                  <option value="defense"> Defense </option><option value="avoid"> Avoid </option>
+                </select>
+                <p class="hint" id="medium-acc-label" style="margin-top:5px;min-height:14px;">⚠️ Wajib dipilih</p>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-title">Settings</div>
+              <div class="row"><div><label>Delay antar insert (detik)</label><input type="number" id="medium-delay" value="3" min="1" max="30" /></div></div>
+              <div style="margin-top:10px;">
+                <label>Max Claim per Character</label>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <input type="number" id="medium-maxclaim" value="1" min="1" max="10" style="width:80px;" />
+                  <div style="display:flex;gap:5px;flex:1;">
+                    <div class="batch-btn" id="medium-maxclaim-1" style="flex:1;" data-medmaxclaim="1">1x</div>
+                    <div class="batch-btn" id="medium-maxclaim-2" style="flex:1;" data-medmaxclaim="2">2x</div>
+                    <div class="batch-btn" id="medium-maxclaim-3" style="flex:1;" data-medmaxclaim="3">3x</div>
+                  </div>
+                </div>
+              </div>
+              <p class="hint">Max Claim = batas claim yang diizinkan sebelum skip.</p>
+            </div>
+            <div>
+              <button class="btn-run" id="medium-btn-run" style="background:#7c3aed;">▶ &nbsp;Insert Medium Now</button>
+              <button class="btn-stop" id="medium-btn-stop">■ &nbsp;Stop</button>
+              <div class="progress-wrap" id="medium-progress-wrap">
+                <div class="progress-bar"><div class="progress-fill" id="medium-progress-fill" style="background:#7c3aed;"></div></div>
+                <div class="progress-footer"><span>Progress</span><span id="medium-progress-text">0 / 0</span></div>
+              </div>
+            </div>
+            <div class="card" style="padding:0;overflow:hidden;">
+              <div class="log-header"><div class="card-title">Log</div></div>
+              <div class="log-box" id="medium-log-box"><span class="log-info">Log Insert Medium.</span></div>
+            </div>
           </div>
+          <div class="footer">Made by <a href="https://discord.com/users/334621293125304331" target="_blank">ERZA</a></div>
+        </div>
 
-          <!-- Saved presets list -->
-          <div id="give-preset-list"
-            style="overflow-y:auto;padding:8px;min-height:60px;max-height:200px;display:flex;flex-direction:column;gap:5px;background:var(--bg1);"></div>
-
-          <div id="give-preset-status"
-            style="padding:5px 12px;font-size:11px;font-family:monospace;min-height:22px;color:var(--text2);background:var(--bg1);border-top:0.5px solid var(--border);">
-            Ready.
+        <!-- ── SPECIAL (disabled) ── -->
+        <div class="pkg-panel" id="pkg-panel-special">
+          <div class="disabled-overlay">
+            <div class="disabled-badge">DISABLED · ON PROGRESS</div>
+            <div class="disabled-title">👑 Special Package</div>
+            <div class="disabled-desc">Fitur ini sedang dalam pengembangan.<br>admin_insert_paket_special</div>
           </div>
         </div>
 
-        <!-- ── HELP TAB ── -->
-        <div id="give-tab-help" class="give-tab-content" style="display:none;flex-direction:column;">
-          <div style="padding:12px;display:flex;flex-direction:column;gap:8px;">
-            <div style="font-size:10px;font-weight:700;color:var(--text2);letter-spacing:2px;margin-bottom:2px;">CARA PAKAI</div>
-
-            <div style="display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:0.5px solid var(--border);">
-              <div style="width:20px;height:20px;min-width:20px;background:#c0392b;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;">1</div>
-              <div style="font-size:12px;line-height:1.5;color:var(--text1);">Isi <b>Server</b> dan <b>Target Character</b></div>
-            </div>
-            <div style="display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:0.5px solid var(--border);">
-              <div style="width:20px;height:20px;min-width:20px;background:#c0392b;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;">2</div>
-              <div style="font-size:12px;line-height:1.5;color:var(--text1);">Buka <b>Bank Remove</b> page → klik <b>Copy Bank Items</b>, atau load preset</div>
-            </div>
-            <div style="display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:0.5px solid var(--border);">
-              <div style="width:20px;height:20px;min-width:20px;background:#c0392b;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;">3</div>
-              <div style="font-size:12px;line-height:1.5;color:var(--text1);">Centang item yang ingin di-give</div>
-            </div>
-            <div style="display:flex;gap:10px;align-items:flex-start;padding:6px 0;">
-              <div style="width:20px;height:20px;min-width:20px;background:#c0392b;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;">4</div>
-              <div style="font-size:12px;line-height:1.5;color:var(--text1);">Klik <b>⚡ FILL GIVE ITEM</b> → tab baru terbuka & form terisi otomatis</div>
-            </div>
-
-            <div style="text-align:center;font-family:monospace;font-size:10px;color:var(--text3);padding-top:4px;">Give Item Helper — GCP Tools v3.3.0 by ERZA</div>
+        <!-- ── RETAIL (disabled) ── -->
+        <div class="pkg-panel" id="pkg-panel-retail">
+          <div class="disabled-overlay">
+            <div class="disabled-badge">DISABLED · ON PROGRESS</div>
+            <div class="disabled-title">🛒 Retail Package</div>
+            <div class="disabled-desc">Fitur ini sedang dalam pengembangan.<br>admin_insert_retail_1</div>
           </div>
         </div>
 
-      </div><!-- end card tabs -->
+      </div><!-- end panel-package -->
 
-    </div><!-- end body -->
-    <div class="footer">Made by <a href="https://discord.com/users/334621293125304331" target="_blank">ERZA</a></div>
-  </div><!-- end view-give -->
+      <!-- ════════ BULK RACE ════════ -->
+      <div class="sidebar-panel" id="panel-race">
+        <div class="panel-header">
+          <div class="panel-title"><span class="pt-icon">⚔️</span> Change <span class="pt-acc">Race</span></div>
+          <div class="panel-sub">Ganti race &amp; job massal</div>
+        </div>
+        <div class="body">
+          <div class="card">
+            <div class="card-title">Server</div>
+            <div class="domain-wrap">
+              <span class="domain-prefix">https://</span>
+              <input type="text" class="inp-domain-field" id="race-domain" value="" placeholder="domain" />
+              <span class="domain-suffix">.gamecp.net</span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Nickname Players</div>
+            <textarea id="race-names" placeholder="erzaa&#10;erzab&#10;erzac"></textarea>
+            <p class="hint" style="margin-top:8px;">Satu nick per baris.</p>
+          </div>
+          <div class="card">
+            <div class="card-title">Setting Race Baru</div>
+            <div style="margin-bottom:10px;">
+              <label>New Race Job</label>
+              <select id="race-new-job">
+                <option value="alR4UkxGcFFGb25yMFNESld4TFZBdz09">Bellato - Warrior</option>
+                <option value="K2hjeDNTaWlvcEU0ZjF3YTVFOTIxZz09">Bellato - Ranger</option>
+                <option value="WVN6TXhtUDhFQVJZR0U4OFh6ZUdhZz09">Bellato - Spiritualist</option>
+                <option value="STVxeHdXbGlBR3pmWU9Vb1M5Z3p4dz09">Bellato - Specialist</option>
+                <option value="YzdzcDQ3aENwR1UrLzZBUEtSNk1Rdz09">Cora - Warrior</option>
+                <option value="N1JqeWd1NmthM0FMQWx2WWhRVkdRQT09">Cora - Ranger</option>
+                <option value="SEQ0Zy8wcG1LSE5EV1NSbTdWRjAyZz09">Cora - Spiritualist</option>
+                <option value="N2NwUTNrUW44Wmo2WUN0SGNRbVZiZz09">Cora - Specialist</option>
+                <option value="TEhIVVlBcWFmYjhWc0U1ZkF1NnVFdz09">Accretia - Warrior</option>
+                <option value="VVoyRHE0OHVlSlRrVS9ZY3JiRWt3dz09">Accretia - Ranger</option>
+                <option value="a0JDUTk2VFpGTlUrSkx1SFh6NHp1UT09">Accretia - Specialist</option>
+              </select>
+            </div>
+            <div class="row">
+              <div><label>New Gender</label><select id="race-new-gender"><option value="0">Male</option><option value="1">Female</option></select></div>
+              <div><label>Old Equip</label>
+                <select id="race-old-equip">
+                  <option value="0">~Auto Race~</option><option value="1">Warrior</option>
+                  <option value="2">Ranger</option><option value="3">Force/Launcher</option>
+                </select>
+              </div>
+            </div>
+            <div style="margin-top:10px;">
+              <label>New Equip</label>
+              <select id="race-new-equip">
+                <option value="0">~Auto Race~</option><option value="1">Warrior</option>
+                <option value="2">Ranger</option><option value="3">Force/Launcher</option>
+              </select>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Settings</div>
+            <div class="row"><div><label>Delay CF (detik)</label><input type="number" id="race-delay" value="30" min="5" max="60" /></div></div>
+            <p class="hint">Delay diperlukan untuk menunggu Cloudflare captcha selesai.</p>
+          </div>
+          <div>
+            <button class="btn-run orange-btn" id="race-btn-run">▶ &nbsp;Change Race Now</button>
+            <button class="btn-stop" id="race-btn-stop">■ &nbsp;Stop</button>
+            <div class="progress-wrap" id="race-progress-wrap">
+              <div class="progress-bar"><div class="progress-fill" id="race-progress-fill"></div></div>
+              <div class="progress-footer"><span>Progress</span><span id="race-progress-text">0 / 0</span></div>
+            </div>
+          </div>
+          <div class="card" style="padding:0;overflow:hidden;">
+            <div class="log-header"><div class="card-title">Log</div></div>
+            <div class="log-box" id="race-log-box"><span class="log-info">Log Bulk Change Race.</span></div>
+          </div>
+        </div>
+        <div class="footer">Made by <a href="https://discord.com/users/334621293125304331" target="_blank">ERZA</a></div>
+      </div>
+
+      <!-- ════════ GIVE ITEM ════════ -->
+      <div class="sidebar-panel" id="panel-give">
+        <div class="panel-header">
+          <div class="panel-title"><span class="pt-icon">📦</span> Give <span class="pt-acc">Item</span></div>
+          <div class="panel-sub">Single · Multi · Bank scan · Preset</div>
+        </div>
+        <div class="body" id="give-inner">
+          <!-- SERVER -->
+          <div class="card">
+            <div class="card-title">Server</div>
+            <div class="domain-wrap">
+              <span class="domain-prefix">https://</span>
+              <input type="text" class="inp-domain-field" id="give-domain" value="" placeholder="domain" />
+              <span class="domain-suffix">.gamecp.net</span>
+            </div>
+          </div>
+          <!-- TARGET CHAR -->
+          <div class="card">
+            <div class="card-title">Target Character</div>
+            <input type="text" id="give-char-name" placeholder="Nickname" style="width:100%;box-sizing:border-box;" />
+          </div>
+          <!-- TABS -->
+          <div class="card" style="padding:0;overflow:hidden;">
+            <div style="display:flex;border-bottom:0.5px solid var(--border);">
+              <div class="give-tab active" data-gtab="give-tab-items"
+                style="flex:1;padding:9px 4px;text-align:center;font-size:11px;font-weight:700;letter-spacing:.5px;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;transition:all .2s;background:var(--bg2);">
+                📦 ITEMS
+              </div>
+              <div class="give-tab" data-gtab="give-tab-preset"
+                style="flex:1;padding:9px 4px;text-align:center;font-size:11px;font-weight:700;letter-spacing:.5px;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;transition:all .2s;background:var(--bg2);">
+                ⭐ PRESET
+              </div>
+              <div class="give-tab" data-gtab="give-tab-help"
+                style="flex:1;padding:9px 4px;text-align:center;font-size:11px;font-weight:700;letter-spacing:.5px;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;transition:all .2s;background:var(--bg2);">
+                ❓ HELP
+              </div>
+            </div>
+
+            <!-- ITEMS TAB -->
+            <div id="give-tab-items" class="give-tab-content" style="display:flex;flex-direction:column;">
+              <div style="padding:7px 12px;background:var(--bg2);border-bottom:0.5px solid var(--border);display:flex;align-items:center;gap:6px;">
+                <div style="flex:1;font-size:11px;color:var(--text2);font-family:monospace;">Items: <span id="give-item-count">0</span>&nbsp;|&nbsp;Sel: <span id="give-selected-count">0</span></div>
+                <button class="give-toolbar-btn" id="give-btn-select-all">ALL</button>
+                <button class="give-toolbar-btn" id="give-btn-clear-sel">NONE</button>
+                <button class="give-toolbar-btn" id="give-btn-refresh" title="Reload dari bank scan">🔄</button>
+                <button class="give-toolbar-btn give-btn-danger" id="give-btn-clear-data" title="Hapus semua data">🗑</button>
+              </div>
+              <div id="give-item-list" style="overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:5px;min-height:80px;max-height:180px;">
+                <div class="give-empty-state">
+                  <div style="font-size:26px;opacity:.4;margin-bottom:6px;">📋</div>
+                  <div style="font-size:12px;font-weight:600;margin-bottom:3px;">No Items Loaded</div>
+                  <div style="font-size:11px;color:var(--text3);line-height:1.6;">Buka <b>Bank Remove</b> → klik <b>Copy Bank Items</b><br>atau load preset di bawah</div>
+                </div>
+              </div>
+              <div style="padding:6px 12px;background:var(--bg2);border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border);display:flex;align-items:center;gap:8px;">
+                <div style="flex:1;font-size:10px;font-weight:700;color:var(--text2);letter-spacing:1.5px;">⭐ LOAD FROM PRESET</div>
+                <span id="give-items-preset-count" style="font-size:10px;color:var(--text2);font-family:monospace;"></span>
+              </div>
+              <div id="give-items-preset-list" style="overflow-y:auto;padding:6px 8px;display:flex;flex-direction:column;gap:4px;max-height:100px;background:var(--bg1);">
+                <div class="give-empty-state" style="padding:8px;">
+                  <div style="font-size:11px;color:var(--text3);">Belum ada preset. Buat di tab <b>PRESET</b>.</div>
+                </div>
+              </div>
+              <div style="padding:10px 12px;border-top:0.5px solid var(--border);background:var(--bg2);">
+                <button id="give-btn-fill" disabled
+                  style="width:100%;padding:9px;border:none;border-radius:6px;font-family:inherit;font-size:13px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:all .2s;background:linear-gradient(135deg,#c0392b,#8e1a0e);color:white;box-shadow:0 2px 8px rgba(192,57,43,0.3);opacity:.5;">
+                  ⚡ FILL GIVE ITEM
+                </button>
+              </div>
+              <div id="give-status-bar" style="padding:5px 12px;font-size:11px;font-family:monospace;min-height:22px;color:var(--text2);background:var(--bg1);border-top:0.5px solid var(--border);">Ready.</div>
+            </div>
+
+            <!-- PRESET TAB -->
+            <div id="give-tab-preset" class="give-tab-content" style="display:none;flex-direction:column;">
+              <div style="padding:10px 12px;background:var(--bg2);border-bottom:0.5px solid var(--border);display:flex;flex-direction:column;gap:8px;">
+                <div style="font-size:10px;font-weight:700;color:var(--text2);letter-spacing:2px;">BUILD PRESET</div>
+                <div>
+                  <label style="font-size:10px;color:var(--text2);display:block;margin-bottom:4px;">PRESET NAME</label>
+                  <input class="give-input" id="give-preset-name" type="text" placeholder="Nama preset..." style="width:100%;box-sizing:border-box;" />
+                </div>
+                <div style="display:flex;gap:6px;">
+                  <div style="flex:2;"><label style="font-size:10px;color:var(--text2);display:block;margin-bottom:4px;">ITEM CODE</label><input class="give-input" id="give-pi-code" type="text" placeholder="Item Code" style="width:100%;box-sizing:border-box;" /></div>
+                  <div style="flex:1;"><label style="font-size:10px;color:var(--text2);display:block;margin-bottom:4px;">QTY</label><input class="give-input" id="give-pi-qty" type="number" value="1" min="1" style="width:100%;box-sizing:border-box;" /></div>
+                </div>
+                <div style="display:flex;gap:6px;align-items:flex-end;">
+                  <div><label style="font-size:10px;color:var(--text2);display:block;margin-bottom:4px;">UPGRADE</label>
+                    <select class="give-select" id="give-pi-upg">
+                      <option value="0">+0</option><option value="1">+1</option><option value="2">+2</option>
+                      <option value="3">+3</option><option value="4">+4</option><option value="5">+5</option>
+                      <option value="6">+6</option><option value="7">+7</option>
+                    </select>
+                  </div>
+                  <div><label style="font-size:10px;color:var(--text2);display:block;margin-bottom:4px;">SLOTS</label>
+                    <select class="give-select" id="give-pi-slots">
+                      <option value="0">0</option><option value="1">1</option><option value="2">2</option>
+                      <option value="3">3</option><option value="4">4</option><option value="5">5</option>
+                      <option value="6">6</option><option value="7">7</option>
+                    </select>
+                  </div>
+                  <div style="flex:1;"><label style="font-size:10px;color:var(--text2);display:block;margin-bottom:4px;">TALIC</label>
+                    <select class="give-select" id="give-pi-talic" style="width:100%;">
+                      <option value="1">No Talic</option><option value="2">Rebirth</option><option value="3">Mercy</option>
+                      <option value="4">Grace</option><option value="5">Glory</option><option value="6">Guard</option>
+                      <option value="7">Belief</option><option value="8">Sacred Flame</option><option value="9">Wisdom</option>
+                      <option value="10">Favor</option><option value="11">Hatred</option><option value="12">Chaos</option>
+                      <option value="13">Darkness</option><option value="14">Destruction</option><option value="15">Ignorant</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- Bulk Add -->
+                <details id="give-bulk-section" style="background:rgba(41,128,185,0.06);border:0.5px solid rgba(41,128,185,0.25);border-radius:7px;padding:0;">
+                  <summary style="cursor:pointer;font-size:10px;font-weight:700;color:#5b9bd5;letter-spacing:1px;padding:6px 10px;list-style:none;display:flex;align-items:center;gap:5px;user-select:none;">
+                    <span id="give-bulk-arrow" style="transition:transform 0.2s;display:inline-block;">▶</span> BULK ADD (multi item code)
+                  </summary>
+                  <div style="padding:8px 10px 10px;display:flex;flex-direction:column;gap:6px;">
+                    <div style="font-size:10px;color:var(--text3);font-family:monospace;letter-spacing:.3px;color:#E3BD37;">
+                      code &nbsp;<span style="color:#E3BD37;">qty</span> &nbsp;<span style="color:#E3BD37;">[+upg] [slots] [Talic]</span>
+                    </div>
+                    <textarea id="give-bulk-codes" rows="5" placeholder="ipwhp01 99&#10;iwaxb50 1 +7 6 Ignorant"
+                      style="width:100%;box-sizing:border-box;background:var(--bg0);border:0.5px solid var(--border);border-radius:6px;color:var(--text1);font-size:11px;font-family:monospace;padding:6px 8px;resize:vertical;line-height:1.6;outline:none;"></textarea>
+                    <div style="display:flex;gap:6px;align-items:center;">
+                      <div style="display:flex;align-items:center;gap:5px;">
+                        <label style="font-size:10px;color:var(--text2);">DEFAULT QTY:</label>
+                        <input id="give-bulk-qty" type="number" value="1" min="1" style="width:54px;background:var(--bg0);border:0.5px solid var(--border);border-radius:6px;color:var(--text1);font-size:11px;padding:4px 6px;outline:none;" />
+                      </div>
+                      <button class="give-action-btn give-btn-blue" id="give-btn-bulk-add" style="flex:1;">⚡ BULK ADD</button>
+                    </div>
+                    <div id="give-bulk-status" style="font-size:10px;color:var(--text2);min-height:14px;"></div>
+                  </div>
+                </details>
+                <div id="give-staging-list" style="display:flex;flex-wrap:wrap;gap:4px;min-height:16px;"></div>
+                <div style="display:flex;gap:6px;">
+                  <button class="give-action-btn give-btn-blue" id="give-btn-add-stage" style="flex:1;">+ ADD</button>
+                  <button class="give-action-btn" id="give-btn-clear-stage" style="padding:6px 10px;font-size:11px;background:var(--bg0);border:0.5px solid var(--border);color:var(--text2);border-radius:6px;cursor:pointer;">CLEAR</button>
+                  <button class="give-action-btn give-btn-purple" id="give-btn-save-preset" style="flex:1;">💾 SAVE</button>
+                </div>
+              </div>
+              <div style="padding:6px 12px;background:var(--bg2);border-bottom:0.5px solid var(--border);display:flex;align-items:center;">
+                <div style="flex:1;font-size:10px;font-weight:700;color:var(--text2);letter-spacing:1.5px;">SAVED PRESETS</div>
+                <span id="give-preset-count" style="font-size:10px;color:var(--text2);font-family:monospace;"></span>
+              </div>
+              <div id="give-preset-list" style="overflow-y:auto;padding:8px;min-height:60px;max-height:200px;display:flex;flex-direction:column;gap:5px;background:var(--bg1);"></div>
+              <div id="give-preset-status" style="padding:5px 12px;font-size:11px;font-family:monospace;min-height:22px;color:var(--text2);background:var(--bg1);border-top:0.5px solid var(--border);">Ready.</div>
+            </div>
+
+            <!-- HELP TAB -->
+            <div id="give-tab-help" class="give-tab-content" style="display:none;flex-direction:column;">
+              <div style="padding:12px;display:flex;flex-direction:column;gap:8px;">
+                <div style="font-size:10px;font-weight:700;color:var(--text2);letter-spacing:2px;margin-bottom:2px;">CARA PAKAI</div>
+                <div style="display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:0.5px solid var(--border);">
+                  <div style="width:20px;height:20px;min-width:20px;background:#c0392b;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;">1</div>
+                  <div style="font-size:12px;line-height:1.5;color:var(--text1);">Isi <b>Server</b> dan <b>Target Character</b></div>
+                </div>
+                <div style="display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:0.5px solid var(--border);">
+                  <div style="width:20px;height:20px;min-width:20px;background:#c0392b;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;">2</div>
+                  <div style="font-size:12px;line-height:1.5;color:var(--text1);">Buka <b>Bank Remove</b> page → klik <b>Copy Bank Items</b>, atau load preset</div>
+                </div>
+                <div style="display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:0.5px solid var(--border);">
+                  <div style="width:20px;height:20px;min-width:20px;background:#c0392b;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;">3</div>
+                  <div style="font-size:12px;line-height:1.5;color:var(--text1);">Centang item yang ingin di-give</div>
+                </div>
+                <div style="display:flex;gap:10px;align-items:flex-start;padding:6px 0;">
+                  <div style="width:20px;height:20px;min-width:20px;background:#c0392b;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;">4</div>
+                  <div style="font-size:12px;line-height:1.5;color:var(--text1);">Klik <b>⚡ FILL GIVE ITEM</b> → tab baru terbuka &amp; form terisi otomatis</div>
+                </div>
+                <div style="text-align:center;font-family:monospace;font-size:10px;color:var(--text3);padding-top:4px;">Give Item Helper — GCP Tools v4.0.1 by ERZA</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="footer">Made by <a href="https://discord.com/users/334621293125304331" target="_blank">ERZA</a></div>
+      </div>
+
+      <!-- ════════ EZ FIX ════════ -->
+      <div class="sidebar-panel" id="panel-ezfix">
+        <div class="panel-header">
+          <div class="panel-title"><span class="pt-icon">🔧</span> EZ <span class="pt-acc">Fix</span></div>
+          <div class="panel-sub">Scan &amp; fix race item inventory</div>
+        </div>
+        <div class="body">
+
+          <!-- Toggle ON/OFF -->
+          <div class="card">
+            <div class="card-title">⚙️ EZ Fix Panel</div>
+            <div style="font-size:11px;color:var(--text2);margin-bottom:10px;">Aktifkan atau nonaktifkan floating panel EZ Fix di halaman Edit Inventory.</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+              <span style="font-size:12px;color:var(--text1);font-weight:600;">Enable EZ Fix</span>
+              <label style="position:relative;display:inline-block;width:36px;height:20px;cursor:pointer;">
+                <input type="checkbox" id="ezfix-toggle" style="opacity:0;width:0;height:0;position:absolute;">
+                <span id="ezfix-toggle-track" style="position:absolute;inset:0;background:var(--bg0);border-radius:20px;border:1px solid var(--border);transition:background .2s;"></span>
+                <span id="ezfix-toggle-thumb" style="position:absolute;top:3px;left:3px;width:12px;height:12px;background:#888;border-radius:50%;transition:transform .2s,background .2s;"></span>
+              </label>
+            </div>
+            <div style="font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;line-height:1.9;margin-bottom:14px;">
+              ✅ Scan item otomatis<br>
+              ✅ Fix race + armor type<br>
+              ✅ Weapon selector popup<br>
+              ✅ Auto Talic +7<br>
+              ✅ Undo / Redo system
+            </div>
+            <div style="font-size:11px;color:var(--text3);line-height:1.6;padding:8px 10px;background:rgba(212,160,23,0.07);border:0.5px solid rgba(212,160,23,0.2);border-radius:6px;">
+              Panel muncul otomatis di halaman<br>
+              <span style="color:var(--acc);font-family:'JetBrains Mono',monospace;font-size:10px;">?do=admin_manage_edit_inventory</span>
+            </div>
+          </div>
+
+          <!-- Open Edit Inventory -->
+          <div class="card">
+            <div class="card-title">🚀 Buka Edit Inventory</div>
+            <div style="font-size:11px;color:var(--text2);margin-bottom:10px;">Langsung buka halaman Edit Inventory sesuai domain server yang aktif.</div>
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;padding:7px 10px;background:var(--bg0);border:0.5px solid var(--border);border-radius:6px;">
+              <span style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;white-space:nowrap;">https://</span>
+              <span id="ezfix-domain-preview" style="font-size:11px;color:var(--acc);font-family:'JetBrains Mono',monospace;font-weight:700;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">—</span>
+              <span style="font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;white-space:nowrap;">.gamecp.net</span>
+            </div>
+            <button id="ezfix-open-btn"
+              style="width:100%;padding:9px;background:linear-gradient(135deg,var(--acc),var(--acc-dim));color:#000;border:none;border-radius:6px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:.5px;transition:opacity .15s;display:flex;align-items:center;justify-content:center;gap:6px;">
+              🔧 Buka Edit Inventory
+            </button>
+            <div id="ezfix-open-status" style="display:none;margin-top:6px;font-size:10px;text-align:center;padding:3px;border-radius:3px;"></div>
+          </div>
+
+        </div>
+        <div class="footer">Made by <a href="https://discord.com/users/334621293125304331" target="_blank">ERZA</a></div>
+      </div>
+
+      <!-- ════════ BANK COPY (info) ════════ -->
+      <div class="sidebar-panel" id="panel-bank">
+        <div class="panel-header">
+          <div class="panel-title"><span class="pt-icon">🏦</span> Bank <span class="pt-acc">Copy</span></div>
+          <div class="panel-sub">Scan bank → auto-fill give item</div>
+        </div>
+        <div class="body">
+          <div class="card">
+            <div style="font-size:12px;color:var(--text2);line-height:1.8;">
+              Buka halaman <b>Bank Remove</b> (<span style="color:var(--acc);font-family:'JetBrains Mono',monospace;font-size:11px;">admin_manage_delete_bank</span>), lalu klik tombol <span style="color:var(--acc);">"Copy Bank Items"</span> yang muncul di samping tombol Search.
+            </div>
+            <div style="margin-top:10px;font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;line-height:1.8;">
+              Item terscan otomatis tersimpan ke storage.<br>
+              Buka Give Item → tab Items untuk load.
+            </div>
+          </div>
+        </div>
+      </div>
 
 
-  <script src="license.js"></script>
-  <script src="popup.js"></script>
+
+      <!-- ════════ SETTINGS ════════ -->
+      <div class="sidebar-panel" id="panel-settings">
+        <div class="panel-header">
+          <div class="panel-title"><span class="pt-icon">⚙️</span> <span class="pt-acc">Settings</span></div>
+          <div class="panel-sub">Konfigurasi terpusat</div>
+        </div>
+        <div class="body">
+
+          <!-- Auto Login -->
+          <div class="card">
+            <div class="card-title">🔐 Auto Login</div>
+            <div style="font-size:11px;color:var(--text2);margin-bottom:10px;">Isi otomatis username, password, dan PIN saat membuka halaman login GCP.</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+              <span style="font-size:12px;color:var(--text1);font-weight:600;">Enable Auto Login</span>
+              <label style="position:relative;display:inline-block;width:36px;height:20px;cursor:pointer;">
+                <input type="checkbox" id="autologin-toggle" style="opacity:0;width:0;height:0;position:absolute;">
+                <span id="autologin-toggle-track" style="position:absolute;inset:0;background:var(--bg0);border-radius:20px;border:1px solid var(--border);transition:background .2s;"></span>
+                <span id="autologin-toggle-thumb" style="position:absolute;top:3px;left:3px;width:12px;height:12px;background:#888;border-radius:50%;transition:transform .2s,background .2s;"></span>
+              </label>
+            </div>
+            <div id="autologin-fields" style="display:flex;flex-direction:column;gap:7px;">
+              <div>
+                <div style="font-size:10px;color:var(--text2);margin-bottom:3px;">Username</div>
+                <input type="text" id="autologin-username" placeholder="username GCP" style="width:100%;box-sizing:border-box;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:6px 8px;font-size:12px;color:var(--text1);outline:none;" />
+              </div>
+              <div>
+                <div style="font-size:10px;color:var(--text2);margin-bottom:3px;">Password</div>
+                <input type="password" id="autologin-password" placeholder="password GCP" style="width:100%;box-sizing:border-box;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:6px 8px;font-size:12px;color:var(--text1);outline:none;" />
+              </div>
+              <div>
+                <div style="font-size:10px;color:var(--text2);margin-bottom:3px;">PIN <span style="color:var(--text2);font-weight:400;">(angka saja)</span></div>
+                <input type="password" id="autologin-pin" placeholder="contoh: 123456" minlength="6" maxlength="6" style="width:100%;box-sizing:border-box;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:6px 8px;font-size:12px;color:var(--text1);outline:none;" />
+              </div>
+              <div style="display:flex;gap:6px;margin-top:2px;">
+                <button id="autologin-save" style="flex:1;padding:7px;background:var(--acc);color:#000;border:none;border-radius:4px;font-size:11px;font-weight:600;cursor:pointer;transition:background .15s;">💾 Simpan</button>
+                <button id="autologin-clear" style="flex:1;padding:7px;background:var(--bg0);color:var(--text2);border:1px solid var(--border);border-radius:4px;font-size:11px;cursor:pointer;">🗑 Hapus</button>
+              </div>
+              <div id="autologin-status" style="display:none;font-size:10px;text-align:center;padding:3px;border-radius:3px;"></div>
+            </div>
+          </div>
+
+          <!-- Database Manager -->
+          <div class="card">
+            <div class="card-title">🗄 Database Manager</div>
+            <div style="font-size:11px;color:var(--text2);margin-bottom:10px;">Daftarkan Sheet ID Google Sheets per domain RF server.<br>EZ Fix akan otomatis pakai database yang sesuai.</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 28px;gap:4px;margin-bottom:4px;">
+              <div style="font-size:10px;font-weight:600;color:var(--text2);padding:0 4px;">DOMAIN</div>
+              <div style="font-size:10px;font-weight:600;color:var(--text2);padding:0 4px;">SHEET ID</div>
+              <div></div>
+            </div>
+            <div id="db-manager-rows" style="display:flex;flex-direction:column;gap:4px;min-height:32px;">
+              <div style="font-size:11px;color:var(--text2);padding:4px;font-style:italic;">Belum ada database terdaftar.</div>
+            </div>
+            <div id="db-add-form" style="display:none;margin-top:10px;border-top:1px solid var(--border);padding-top:10px;">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;">
+                <div>
+                  <div style="font-size:10px;color:var(--text2);margin-bottom:3px;">Domain prefix</div>
+                  <div style="display:flex;align-items:center;gap:2px;">
+                    <input type="text" id="db-add-domain" placeholder="domain" style="flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:5px 7px;font-size:11px;color:var(--text1);outline:none;width:100%;box-sizing:border-box;" />
+                    <span style="font-size:10px;color:var(--text2);white-space:nowrap;">.gamecp.net</span>
+                  </div>
+                </div>
+                <div>
+                  <div style="font-size:10px;color:var(--text2);margin-bottom:3px;">Sheet ID</div>
+                  <input type="text" id="db-add-sheetid" placeholder="104XEr2G..." style="width:100%;box-sizing:border-box;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:5px 7px;font-size:11px;color:var(--text1);outline:none;" />
+                </div>
+              </div>
+              <div style="display:flex;gap:6px;">
+                <button id="db-add-save" style="flex:1;padding:6px;background:var(--acc);color:#000;border:none;border-radius:4px;font-size:11px;font-weight:600;cursor:pointer;transition:background .15s;">💾 Simpan</button>
+                <button id="db-add-cancel" style="flex:1;padding:6px;background:var(--bg0);color:var(--text2);border:1px solid var(--border);border-radius:4px;font-size:11px;cursor:pointer;">Batal</button>
+              </div>
+              <div id="db-add-error" style="display:none;font-size:10px;color:#ed4245;margin-top:5px;"></div>
+            </div>
+            <button id="db-add-btn" style="margin-top:10px;width:100%;padding:7px;background:var(--bg3);color:var(--acc);border:1px dashed var(--acc-border);border-radius:4px;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;">＋ Tambah Domain</button>
+          </div>
+
+          <!-- Background Image -->
+          <div class="card">
+            <div class="card-title">🖼️ Background Gambar</div>
+            <div style="font-size:11px;color:var(--text3);margin-bottom:8px;font-family:'JetBrains Mono',monospace;">Upload gambar .webp/.png/.jpg untuk background popup</div>
+            <div class="bg-preview-wrap" id="bg-preview-wrap">
+              <img id="bg-preview-img" class="bg-preview-img" alt="BG Preview" />
+              <span class="bg-preview-none" id="bg-preview-none">Belum ada gambar</span>
+            </div>
+            <div style="display:flex;gap:6px;margin-bottom:10px;">
+              <label for="bg-file-input" style="flex:1;padding:7px;background:var(--bg3);color:var(--acc);border:1px dashed var(--acc-border);border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;text-align:center;letter-spacing:.5px;margin:0;font-family:'Rajdhani',sans-serif;text-transform:uppercase;">📁 Pilih Gambar</label>
+              <input type="file" id="bg-file-input" accept="image/webp,image/png,image/jpeg" style="display:none;" />
+              <button id="bg-remove-btn" style="padding:7px 12px;background:transparent;color:#e85347;border:1px solid rgba(232,83,71,.35);border-radius:5px;font-size:11px;cursor:pointer;font-family:'Rajdhani',sans-serif;font-weight:600;">🗑 Hapus</button>
+            </div>
+            <div class="bg-slider-wrap">
+              <label>Gelap</label>
+              <input type="range" id="bg-overlay-slider" min="0" max="90" value="55" step="5" />
+              <span class="bg-slider-val" id="bg-overlay-val">55%</span>
+            </div>
+            <div class="bg-slider-wrap" style="margin-top:4px;">
+              <label>Panel</label>
+              <input type="range" id="bg-panel-slider" min="0" max="100" value="100" step="5" />
+              <span class="bg-slider-val" id="bg-panel-val">100%</span>
+            </div>
+            <div id="bg-status" style="display:none;font-size:10px;text-align:center;padding:3px;border-radius:3px;margin-top:6px;"></div>
+          </div>
+
+          <!-- Theme Color -->
+          <div class="card">
+            <div class="card-title">🎨 Tema Warna</div>
+            <div style="font-size:11px;color:var(--text3);margin-bottom:6px;font-family:'JetBrains Mono',monospace;">Pilih warna aksen UI — berlaku di semua panel</div>
+            <div class="theme-grid" id="theme-grid">
+              <div class="theme-swatch selected" data-acc="#d4a017" data-dim="#8a6610" style="background:#d4a017;"><div class="ts-check">✓</div></div>
+              <div class="theme-swatch" data-acc="#3fb950" data-dim="#1e8449" style="background:#3fb950;"><div class="ts-check">✓</div></div>
+              <div class="theme-swatch" data-acc="#58a6ff" data-dim="#1f6feb" style="background:#58a6ff;"><div class="ts-check">✓</div></div>
+              <div class="theme-swatch" data-acc="#a78bfa" data-dim="#7c3aed" style="background:#a78bfa;"><div class="ts-check">✓</div></div>
+              <div class="theme-swatch" data-acc="#f97316" data-dim="#c2410c" style="background:#f97316;"><div class="ts-check">✓</div></div>
+              <div class="theme-swatch" data-acc="#ec4899" data-dim="#9d174d" style="background:#ec4899;"><div class="ts-check">✓</div></div>
+              <div class="theme-swatch" data-acc="#22d3ee" data-dim="#0e7490" style="background:#22d3ee;"><div class="ts-check">✓</div></div>
+              <div class="theme-swatch" data-acc="#e85347" data-dim="#991b1b" style="background:#e85347;"><div class="ts-check">✓</div></div>
+              <div class="theme-swatch" data-acc="#94a3b8" data-dim="#475569" style="background:#94a3b8;"><div class="ts-check">✓</div></div>
+            </div>
+            <div class="theme-preview" id="theme-preview">Preview: aksen warna aktif</div>
+          </div>
+
+        </div>
+        <div class="footer">Made by <a href="https://discord.com/users/334621293125304331" target="_blank">ERZA</a></div>
+      </div>
+
+      <!-- ════════ LOG UPDATE ════════ -->
+      <div class="sidebar-panel" id="panel-log">
+        <div class="panel-header">
+          <div class="panel-title"><span class="pt-icon">📋</span> Log <span class="pt-acc">Update</span></div>
+          <div class="panel-sub">Riwayat perubahan versi</div>
+        </div>
+        <div class="body">
+          <div class="changelog">
+
+            <!-- v4.0.1 -->
+            <div class="cl-version">
+              <div class="cl-ver-header">
+                <span class="cl-ver-badge latest">v4.0.1</span>
+                <span style="font-size:11px;color:var(--text2);font-weight:500;">Sidebar UI · Theme Engine · EZ Fix Preset · Talic Guard</span>
+                <span class="cl-ver-date">2026</span>
+              </div>
+              <div class="cl-items">
+                <div class="cl-item"><div class="cl-dot green"></div><span>🎨 <b>Sidebar Navigation</b> — redesign total UI ke layout sidebar collapsible « »</span></div>
+                <div class="cl-item"><div class="cl-dot green"></div><span>🎨 <b>Theme Engine</b> — pilih 9 warna aksen di Settings, sync real-time ke EZ Fix &amp; weapon popup</span></div>
+                <div class="cl-item"><div class="cl-dot green"></div><span>🖼️ <b>Custom Background</b> — upload gambar .webp/.png/.jpg, atur overlay gelap &amp; panel opacity via slider</span></div>
+                <div class="cl-item"><div class="cl-dot green"></div><span>🔧 <b>EZ Fix Toggle</b> — enable/disable floating panel EZ Fix langsung dari Settings, tanpa reload</span></div>
+                <div class="cl-item"><div class="cl-dot green"></div><span>📌 <b>EZ Fix Preset System</b> — buat preset race+job+armor+acc+cloak+shield, inject button ke halaman sesuai race player, apply 1 klik</span></div>
+                <div class="cl-item"><div class="cl-dot green"></div><span>⚠️ <b>Talic Guard</b> — deteksi talic invalid per item code, badge merah di scan list, block tombol Update Inventory sampai diperbaiki</span></div>
+                <div class="cl-item"><div class="cl-dot green"></div><span>⚔️ <b>Weapon Job Mismatch</b> — highlight weapon salah job berdasarkan preset yang diapply (Warrior/Ranger/Force/dll)</span></div>
+                <div class="cl-item"><div class="cl-dot green"></div><span>🗄️ <b>Weapon DB extended</b> — kolom weaponClass &amp; job dari sheet (kolom E &amp; F), auto-invalidate cache lama</span></div>
+                <div class="cl-item"><div class="cl-dot green"></div><span>📦 <b>Bulk Package</b> — tab Special &amp; Retail Package ditambahkan (disabled · on progress)</span></div>
+                <div class="cl-item"><div class="cl-dot orange"></div><span>Dashboard panel baru — Quick Access, License Card, Update Banner</span></div>
+                <div class="cl-item"><div class="cl-dot orange"></div><span>License view diperbarui — tampilkan owner, plan, expires, masked key &amp; tombol Deactivate</span></div>
+                <div class="cl-item"><div class="cl-dot orange"></div><span>EZ Fix tab MAIN / PRESET di dalam panel floating</span></div>
+                <div class="cl-item"><div class="cl-dot orange"></div><span>Weapon popup sync tema warna otomatis saat dibuka</span></div>
+              </div>
+            </div>
+
+            <!-- v4.0.0 -->
+            <div class="cl-version">
+              <div class="cl-ver-header">
+                <span class="cl-ver-badge">v4.0.0</span>
+                <span style="font-size:11px;color:var(--text2);font-weight:500;">Change UI</span>
+                <span class="cl-ver-date">2026</span>
+              </div>
+              <div class="cl-items">
+                <div class="cl-item"><div class="cl-dot green"></div><span>🔐 Sistem lisensi — validasi key, cache 6 jam</span></div>
+                <div class="cl-item"><div class="cl-dot green"></div><span>🎨 Redesign UI popup launcher</span></div>
+                <div class="cl-item"><div class="cl-dot orange"></div><span>Dynamic database per domain server</span></div>
+              </div>
+            </div>
+
+            <!-- v3.3.0 -->
+            <div class="cl-version">
+              <div class="cl-ver-header">
+                <span class="cl-ver-badge">v3.3.0</span>
+                <span style="font-size:11px;color:var(--text2);font-weight:500;">Settings, Auto Login &amp; CF Guard</span>
+                <span class="cl-ver-date">2026</span>
+              </div>
+              <div class="cl-items">
+                <div class="cl-item"><div class="cl-dot green"></div><span>Tab baru <b>⚙ Settings</b> — konfigurasi terpusat</span></div>
+                <div class="cl-item"><div class="cl-dot green"></div><span><b>Auto Login</b> — isi username, password &amp; PIN otomatis + pantau Turnstile</span></div>
+                <div class="cl-item"><div class="cl-dot green"></div><span><b>Database Manager</b> — Sheet ID per domain</span></div>
+                <div class="cl-item"><div class="cl-dot green"></div><span><b>CF Interstitial Guard</b> — semua bulk pause otomatis saat CF "Just a moment"</span></div>
+              </div>
+            </div>
+
+            <!-- v3.2.9 -->
+            <div class="cl-version">
+              <div class="cl-ver-header">
+                <span class="cl-ver-badge">v3.2.9</span>
+                <span style="font-size:11px;color:var(--text2);font-weight:500;">Give Item Helper</span>
+                <span class="cl-ver-date">2026</span>
+              </div>
+              <div class="cl-items">
+                <div class="cl-item"><div class="cl-dot green"></div><span>Fitur baru: <b>Give Item Helper</b></span></div>
+                <div class="cl-item"><div class="cl-dot green"></div><span>Scan item dari Bank Remove via <b>Copy Bank Items</b></span></div>
+                <div class="cl-item"><div class="cl-dot green"></div><span>Preset system — buat, simpan, load, edit, hapus</span></div>
+                <div class="cl-item"><div class="cl-dot orange"></div><span>Fix popup dobel &amp; Fix Select2 label</span></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="footer">Made by <a href="https://discord.com/users/334621293125304331" target="_blank">ERZA</a></div>
+      </div>
+
+    </div><!-- end sidebar-content -->
+  </div><!-- end app-body -->
+</div><!-- end view-main -->
+
+<script src="license.js"></script>
+<script src="popup.js"></script>
 </body>
 </html>
