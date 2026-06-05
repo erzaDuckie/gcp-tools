@@ -548,7 +548,7 @@ option { background: #1c1f23; }
 .lic-strip-logout:hover { color: var(--red); }
 
 .update-banner {
-  display: none;
+  display: flex;
   background: linear-gradient(135deg,#1a1f3a,#1e2040);
   border: 1px solid rgba(88,101,242,0.4);
   border-radius: 7px; padding: 10px 12px; margin-bottom: 10px; cursor: pointer;
