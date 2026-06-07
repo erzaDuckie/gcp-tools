@@ -211,30 +211,27 @@
   // ════════════════════════════════════════════════
 
   function main() {
-    chrome.storage.local.get(
-      ['autologin_enabled', 'autologin_username', 'autologin_password', 'autologin_pin'],
-      async function(data) {
-        if (!data.autologin_enabled) return;
+    chrome.storage.local.get('autologin_enabled', async function(data) {
+      if (!data.autologin_enabled) return;
 
-        if (isLoginPage()) {
-          const username = (data.autologin_username || '').trim();
-          const password = data.autologin_password || '';
-          if (!username || !password) {
-            console.warn('[AutoLogin] Credentials belum diset di Settings.'); return;
-          }
-          console.log('[AutoLogin] Halaman LOGIN terdeteksi');
-          await handleLogin(username, password);
+      // Decrypt credentials via GCPCrypto
+      const { username, password, pin } = await GCPCrypto.loadCredentials();
 
-        } else if (isPinPage()) {
-          const pin = (data.autologin_pin || '').trim();
-          if (!pin) {
-            console.warn('[AutoLogin] PIN belum diset di Settings.'); return;
-          }
-          console.log('[AutoLogin] Halaman PIN terdeteksi — PIN:', '*'.repeat(pin.length));
-          await handlePin(pin);
+      if (isLoginPage()) {
+        if (!username || !password) {
+          console.warn('[AutoLogin] Credentials belum diset di Settings.'); return;
         }
+        console.log('[AutoLogin] Halaman LOGIN terdeteksi');
+        await handleLogin(username, password);
+
+      } else if (isPinPage()) {
+        if (!pin) {
+          console.warn('[AutoLogin] PIN belum diset di Settings.'); return;
+        }
+        console.log('[AutoLogin] Halaman PIN terdeteksi — PIN:', '*'.repeat(pin.length));
+        await handlePin(pin);
       }
-    );
+    });
   }
 
   if (document.readyState === 'loading') {

@@ -44,7 +44,7 @@
   "content_scripts": [
     {
       "matches": ["https://*.gamecp.net/*"],
-      "js": ["content_autologin.js"],
+      "js": ["crypto_helper.js", "content_autologin.js"],
       "run_at": "document_idle"
     },
     {

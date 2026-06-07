@@ -32,3 +32,7 @@ All-in-one Chrome Extension untuk GCP Warden admin panel.
 4. Klik ikon **reload (🔄)** di card GCP TOOLS
 5. Selesai ✅ — tidak perlu install ulang dari awal
 
+---
+
+
+Made by **ERZA** · [Discord](https://discord.com/users/334621293125304331)

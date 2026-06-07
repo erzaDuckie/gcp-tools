@@ -60,7 +60,7 @@
 #rfFixer {
   position: fixed;
   top: 0; right: 0;
-  width: 380px; min-width: 380px; max-width: 380px;
+  width: 380px;
   box-sizing: border-box;
   background: var(--bg1);
   border-left: 1px solid var(--border2);
@@ -402,6 +402,8 @@ select[name="talic_type"] option:disabled {
 
 /* Item note & grade lines inside scanned item */
 .item-note  { font-size: 11px; color: var(--text1); margin-top: 4px; opacity: 0.85; }
+.item-page-name { font-size: 11px; color: var(--text1); margin-top: 4px; font-weight: 600; opacity: 1; }
+.item-db-note   { font-size: 10px; color: var(--text3); margin-top: 1px; opacity: 0.6; font-style: italic; }
 .item-grade { font-size: 10px; color: var(--text2); margin-top: 2px; }
 
 /* Failed item row */
@@ -750,4 +752,88 @@ select[name="talic_type"] option:disabled {
   border-radius: 4px;
   padding: 2px 6px;
   line-height: 1.5;
+}
+ 
+ 
+/* ==================== SETTINGS TAB ==================== */
+
+.ezfix-settings-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.ezfix-settings-group-title {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    color: var(--amber);
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--border);
+    text-transform: uppercase;
+}
+
+.ezfix-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--text1);
+    cursor: pointer;
+    padding: 2px 0;
+    gap: 8px;
+}
+
+.ezfix-toggle-row span {
+    flex: 1;
+}
+
+.ezfix-toggle {
+    position: relative;
+    appearance: none;
+    -webkit-appearance: none;
+    width: 32px;
+    height: 17px;
+    background: var(--bg0);
+    border: 1px solid var(--border2);
+    border-radius: 999px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.2s;
+}
+
+.ezfix-toggle:checked {
+    background: var(--amber);
+    border-color: var(--amber);
+}
+
+.ezfix-toggle::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 11px;
+    height: 11px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.2s;
+}
+
+.ezfix-toggle:checked::after {
+    transform: translateX(15px);
+}
+
+.ezfix-settings-sub {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--text2);
+    gap: 8px;
+    padding: 2px 0 2px 8px;
+    border-left: 2px solid var(--border);
+}
+
+.ezfix-settings-sub span {
+    flex: 1;
 }

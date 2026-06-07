@@ -50,7 +50,6 @@ function decodeUpgrade(dataUpg) {
 function scanBankItems() {
   const items = [];
   const allRows = document.querySelectorAll("#porm tr");
-  const seen = new Set();
 
   allRows.forEach((row, idx) => {
     if (row.querySelector("th.success")) return;
@@ -82,8 +81,6 @@ function scanBankItems() {
 
     const serialLink = row.querySelector("a[href*='item_ser=']");
     const serial = serialLink ? serialLink.textContent.trim() : `${itemCode}_${idx}`;
-    if (seen.has(serial)) return;
-    seen.add(serial);
 
     let qty = 1;
     for (const d of infoTd.querySelectorAll("div")) {

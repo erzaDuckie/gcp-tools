@@ -881,6 +881,25 @@ option { background: #1c1f23; }
   letter-spacing: 1px;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
+.lic-revalidate-btn {
+  flex-shrink: 0;
+  background: transparent;
+  border: 1px solid rgba(90,180,90,.35);
+  border-radius: 6px;
+  color: #5db880;
+  padding: 5px 9px;
+  font-size: 13px; cursor: pointer;
+  transition: all .18s;
+  line-height: 1;
+}
+.lic-revalidate-btn:hover {
+  background: rgba(90,180,90,.12);
+  border-color: #5db880;
+  box-shadow: 0 0 8px rgba(93,184,128,.2);
+}
+.lic-revalidate-btn:disabled {
+  opacity: 0.5; cursor: not-allowed;
+}
 .lic-deactivate-btn {
   flex-shrink: 0;
   background: transparent;
